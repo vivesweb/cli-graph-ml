@@ -418,6 +418,7 @@ Example:
 - **DRAW 3 GRAPHS, SIDE BY SIDE (SEE EXAMPLE.PHP):**	
 
 	    // draw 3 graphs floating
+	    $arr_val_example_1 = [  1,2,5,6,7,9,12,15,18,19,38 ];
 	    $arr_val_example_2 = [  7,7,6,3,5,8,0,10,8,9,3 ];
 	    $arr_val_example_3 = [  11,22,55,60,70,90,120,150,180,190,380 ];
 	    $axis_x_values = [ 'Jan', 'Jun', 'Dec' ];
