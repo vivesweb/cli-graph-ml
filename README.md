@@ -1,4 +1,4 @@
-# cli-graph-ml
+# CLI PHP Graph Bars for Machine Learning with Outliers alert
 CLI PHP for visualize Machine learning datasets in Graph bar format. Detect Outliers. See your data before Training
 
 Before training processes at Deep Learning, the most hard work is to have a good datasets in its structure. Always we need to check the datasets before and if we see the data in graphs bars is more easy to detect outliers. This php class helps you to detect it with a shortest time. The class alert you about outliers with Red Bars.
