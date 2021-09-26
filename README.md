@@ -13,7 +13,11 @@ The bar graphs are customizable in:
 
 # SCREENSHOTS:
 ![Screenshot of 3 float bar charts in CLI PHP environtment](https://github.com/vivesweb/cli-graph-ml/blob/main/bar-multi-graph-cli-php.png?raw=true)
+Screenshot of 3 float bar charts in CLI PHP environtment
+
+
 ![Screenshot of custom bar charts in CLI PHP environtment](https://github.com/vivesweb/cli-graph-ml/blob/main/bar-graph-cli-php.png?raw=true)
+Screenshot of custom bar charts in CLI PHP environtment
  
  # REQUERIMENTS:
  
