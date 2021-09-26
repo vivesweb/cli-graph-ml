@@ -274,7 +274,7 @@ ini_set( 'default_charset', 'UTF-8' );
     private $max_value;
     private $arr_prepare_output = [];
 
-    private $outlier_factor = 2;
+    private $outlier_factor = 3;
     private $outl_up_limit = 0;
     private $outl_down_limit = 0;
    
