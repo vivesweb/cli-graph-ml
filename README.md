@@ -77,7 +77,7 @@ Screenshot of custom bar charts in CLI PHP environtment
 
 - **CREATE CLI-GRAPH-ML:**
  
-*$bar_graph= new cli_graph_ml( $arr_val_example_1, $axis_x_values );
+*$bar_graph= new cli_graph_ml( $arr_val_example_1, $axis_x_values );*
 
 Example:
 
