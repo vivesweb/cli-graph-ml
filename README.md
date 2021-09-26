@@ -413,6 +413,42 @@ With next methods you will need to know the numer of lines before de output.
 Example:
 
         $count_output_lines = $bar_graph->count_output_lines();
+	
+	
+- **DRAW 3 GRAPHS, SIDE BY SIDE (SEE EXAMPLE.PHP):**	
+	// draw 3 graphs floating
+	$arr_val_example_2 = [  7,7,6,3,5,8,0,10,8,9,3 ];
+	$arr_val_example_3 = [  11,22,55,60,70,90,120,150,180,190,380 ];
+	$axis_x_values = [ 'Jan', 'Jun', 'Dec' ];
+	
+	$bar_graph = [];
+	
+	$bar_graph[] = new cli_graph_ml( $arr_val_example_1, $axis_x_values, $config );
+	$bar_graph[0]->set_title( 'Months 1 in %' );
+	
+	$bar_graph[] = new cli_graph_ml( $arr_val_example_2, $axis_x_values, $config );
+	$bar_graph[1]->set_title( 'Months 2 in %' );
+	
+	$bar_graph[] = new cli_graph_ml( $arr_val_example_3, $axis_x_values, $config );
+	$bar_graph[2]->set_title( 'Months 3 in %' );
+	
+	// Prepare on each graph
+	foreach( $bar_graph as$graph){
+	    $graph->prepare_array_output( );
+	}
+	
+	// draw on each graph each line
+		// IMPORTANT: All graphs will need to have the same number of Lines
+	// We take a counter of lines of the first graph. We assume all have the same
+	$count_output_lines = $bar_graph[0]->count_output_lines();
+	
+	for( $i = 0; $i< $count_output_lines; $i++ ){
+ 	   foreach( $bar_graph as $graph){
+ 	       $graph->draw( $i, false, false); // Draw line $i, dont do line break and do not do prepare
+  	  }
+	
+	    echo PHP_EOL; // for get new line
+	}
 
 
 
