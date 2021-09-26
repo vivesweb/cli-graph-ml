@@ -274,7 +274,7 @@ ini_set( 'default_charset', 'UTF-8' );
     private $max_value;
     private $arr_prepare_output = [];
 
-    private $outlier_factor = 3;
+    private $outlier_factor = 2;
     private $outl_up_limit = 0;
     private $outl_down_limit = 0;
    
@@ -717,7 +717,7 @@ ini_set( 'default_charset', 'UTF-8' );
 				$sum_median += $substract * $substract; // pow($substract, 2);
             }
 
-            $vari = $Sum/$this->count_data;
+            $vari = $sum_median/$this->count_data;
             $std = sqrt($vari);
 
             $this->outl_up_limit = $avg + $std * $this->outlier_factor;
