@@ -38,9 +38,9 @@ Screenshot of custom bar charts in CLI PHP environtment
  *example.php* -> **example file**
  
   # NOTE ABOUT OUTLIER FACTOR:
- The class hass a variable with the outlier_factor. Normally 3 is used. If you wan to use other factor, change here:
+ The class hass a variable with the outlier_factor. Normally 2 or 3 are good factors. If you wan to use other factor, change here:
  
-         private $outlier_factor = 3;
+         private $outlier_factor = 2;
  
  
  # INSTALLATION:
