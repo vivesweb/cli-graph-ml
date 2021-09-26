@@ -54,7 +54,7 @@ Screenshot of custom bar charts in CLI PHP environtment
  - Standard Derivation of values
  - Limit Outliers Upper
  - Limit Outliers Down
- - The outliers values will be drawed in RED column bar (See screenshots
+ - The outliers values will be drawed in RED column bar (See screenshots)
  
  # BASIC USAGE:
  
