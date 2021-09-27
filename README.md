@@ -38,9 +38,7 @@ Screenshot of custom bar charts in CLI PHP environtment
  *example.php* -> **example file**
  
   # NOTE ABOUT OUTLIER FACTOR:
- The class hass a variable with the outlier_factor. Normally 3 are good factor. If you wan to use other factor, change here:
- 
-         private $outlier_factor = 3;
+ The class hass a variable with the outlier_factor. There is no trivial solution for x, but usually, a value between 2 and 4 seems practical. See set_outlier_factor() Method
  
  
  # INSTALLATION:
@@ -97,6 +95,18 @@ Example:
 Example:
 
         $bar_graph->set_bar_width( 2 );
+
+
+
+- **SET OUTLIER FACTOR:**
+ 
+Outlier factor determines where a value is inside or outside a noramlly range values. There is no trivial solution for the value, but usually, a value between 2 and 4 seems practical. You can change the outlier factor value with
+ 
+*set_outlier_factor( $float_factor )*
+
+Example:
+
+        $bar_graph->set_outlier_factor( 3 );
 
 
 
