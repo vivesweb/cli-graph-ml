@@ -705,23 +705,25 @@ ini_set( 'default_charset', 'UTF-8' );
         // Som math calcs
         if( $this->get_cfg_param( 'explain_values' ) ){
             $Sum = array_sum($this->data);
-            $avg = number_format($Sum / $this->count_data, 2, '.', '');
+            $avg = $Sum / $this->count_data;
             $arr_sort = $this->data;
             $pos_median = ($this->count_data + 1) / 2;
-            sort($arr_sort);
+            sort($arr_sort, SORT_NUMERIC );
             $median = (double)((($this->count_data % 2 != 0)) ? $arr_sort[$pos_median - 1] : ($arr_sort[$pos_median - 1] + $arr_sort[$pos_median]) / 2);
-            $sum_median = $vari = $std = 0;
+            $sum_median = 0;
 
             for($i=0; $i<$this->count_data;$i++){
                 $substract = $this->data[$i] - $median;
 				$sum_median += $substract * $substract; // pow($substract, 2);
             }
 
-            $vari = $sum_median/$this->count_data;
+            $vari = $Sum/$this->count_data;
             $std = sqrt($vari);
 
             $this->outl_up_limit = $avg + $std * $this->outlier_factor;
             $this->outl_down_limit = $avg - $std * $this->outlier_factor;
+
+            $avg = number_format($avg, 2, '.', '');
         }
 
         // Prepare Graph Lines
