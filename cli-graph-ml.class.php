@@ -37,7 +37,7 @@ ini_set( 'default_charset', 'UTF-8' );
  * @author {@link https://www.inatica.com/ Inatica}
  * @blog {@link https://rafamartin10.blogspot.com/ Blog Rafael Martin Soto}
  * @since September 2021
- * @version 1.0.0
+ * @version 1.0.1
  * @license GNU General Public License v3.0
  * 
  * @param string $data
@@ -272,6 +272,7 @@ ini_set( 'default_charset', 'UTF-8' );
     
     private $graph_length;
     private $max_value;
+    private $min_value;
     private $arr_prepare_output = [];
 
     private $outlier_factor = 2;
@@ -338,6 +339,7 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->data = $data;
         $this->count_data = count( $this->data );
         $this->max_value = max( $this->data );
+        $this->min_value = min( $this->data );
     }// /set_data()
 
 
@@ -696,8 +698,12 @@ ini_set( 'default_charset', 'UTF-8' );
         $border_cfg = $this->border_chars[$this->get_cfg_param( 'border_chars' )];
         $chr_border_left = $border_cfg['left'];
 
-        $y_blocks = (int)($this->max_value / $this->graph_length);
+        $y_blocks = (($this->max_value-$this->min_value) / $this->graph_length);
         $max_y_length = strlen($this->max_value);
+        // if is <10, we need to add 1 decimal. Then the strlen is added with decimal separator and one number
+        if($this->max_value - $this->min_value < 10){
+            $max_y_length += 2;
+        }
 
         // Padding left
         $str_padding_left = str_repeat(' ', $this->get_cfg_param( 'padding_left' ));
@@ -759,7 +765,11 @@ ini_set( 'default_charset', 'UTF-8' );
 
         // Get array of string graph
         for($i=0; $i<$this->graph_length;$i++){
-            $value_y = (int)($this->max_value-$y_blocks*$i);
+            if($this->max_value - $this->min_value < 10){
+                $value_y = number_format($this->max_value-$y_blocks*$i, 1, '.', '' );
+            } else {
+                $value_y = (int)($this->max_value-$y_blocks*$i);
+            }
             $value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
             $str_char_title_y_loop = (( $this->get_cfg_param( 'show_y_axis_title' ))?$str_pad_axis_y_title[$i].' ':'');
             $chr_underlines = (( $this->get_cfg_param( 'draw_underlines') && (($i+1)%$this->get_cfg_param( 'underlines_every') == 0))?'_':' ');
