@@ -274,7 +274,7 @@ ini_set( 'default_charset', 'UTF-8' );
     private $max_value;
     private $arr_prepare_output = [];
 
-    private $outlier_factor = 3;
+    private $outlier_factor = 2;
     private $outl_up_limit = 0;
     private $outl_down_limit = 0;
    
@@ -376,13 +376,22 @@ ini_set( 'default_charset', 'UTF-8' );
 
 
     /**
+     * Set Outlier Factor
+     * @param double $outlier_factor
+     */
+    public function set_outlier_factor( $outlier_factor = 2 ){
+        $this->outlier_factor = $outlier_factor;
+    }// /set_outlier_factor()
+
+
+
+    /**
      * Set TITLE
      * @param string $title
      */
     public function set_title( $title = '' ){
         $this->config['title'] = $title;
     }// /set_title()
-
 
 
     /**
@@ -713,11 +722,11 @@ ini_set( 'default_charset', 'UTF-8' );
             $sum_median = 0;
 
             for($i=0; $i<$this->count_data;$i++){
-                $substract = $this->data[$i] - $median;
+                $substract = $this->data[$i] - $avg;
 				$sum_median += $substract * $substract; // pow($substract, 2);
             }
 
-            $vari = $Sum/$this->count_data;
+            $vari = $sum_median/$this->count_data;
             $std = sqrt($vari);
 
             $this->outl_up_limit = $avg + $std * $this->outlier_factor;
