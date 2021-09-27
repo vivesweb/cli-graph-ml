@@ -43,7 +43,7 @@ Screenshot of custom bar charts in CLI PHP environtment
  You can use the class to display bar charts with all features of colors, formats, ... as standard bar chart. To do it you simply need to hide the data explain the values.  Outliers bars will not be drawed in red and will be a standard bar col too. See *$bar_graph->set_explain_values( $boolean );* method.
  
   # NOTE ABOUT OUTLIER FACTOR:
- The class hass a variable with the outlier_factor. There is no trivial solution for x, but usually, a value between 2 and 4 seems practical. See set_outlier_factor() Method
+ The class has a variable with the outlier_factor. There is no trivial solution for x, but usually, a value between 2 and 4 seems practical. See set_outlier_factor() Method
  
  
  # INSTALLATION:
