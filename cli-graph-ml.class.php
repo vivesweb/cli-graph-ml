@@ -637,7 +637,17 @@ ini_set( 'default_charset', 'UTF-8' );
             $full = (int) ($this->data[$i] * ($this->graph_length) / $this->max_value);
             $empty = $this->graph_length - $full;
 
-            $this->arr_prepare_output[] = str_repeat('1', $full).str_repeat('0', $empty);
+            $StrPrepare = '';
+
+            if($full > 0){
+                $StrPrepare .= str_repeat('1', $full);
+            }
+
+            if($empty > 0){
+                $StrPrepare .= str_repeat('0', $empty);
+            }
+
+            $this->arr_prepare_output[] = $StrPrepare;
         }
 
         unset( $i );
