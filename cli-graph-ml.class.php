@@ -37,7 +37,7 @@ ini_set( 'default_charset', 'UTF-8' );
  * @author {@link https://www.inatica.com/ Inatica}
  * @blog {@link https://rafamartin10.blogspot.com/ Blog Rafael Martin Soto}
  * @since September 2021
- * @version 1.0.1
+ * @version 1.0.2
  * @license GNU General Public License v3.0
  * 
  * @param string $data
@@ -278,6 +278,7 @@ ini_set( 'default_charset', 'UTF-8' );
     private $outlier_factor = 2;
     private $outl_up_limit = 0;
     private $outl_down_limit = 0;
+    private $arr_id_data_visible = []; // Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
    
 	
     public function __construct( $data = null, $axis_x_values = null, $config = null) {
@@ -343,9 +344,19 @@ ini_set( 'default_charset', 'UTF-8' );
     }// /set_data()
 
 
+    
+    /**
+     * Set array of id's visibles even the value is 0
+     * Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
+     * @param array $arr_id_data_visible
+     */
+    public function set_arr_id_data_visible( $arr_id_data_visible ){
+        $this->arr_id_data_visible = $arr_id_data_visible;
+    }// /set_arr_id_data_visible()
+
 
     /**
-     * Set EXPLAIN VALUEs
+     * Set EXPLAIN VALUES
      * @param boolean $explain_values
      */
     public function set_explain_values( $explain_values = true ){
@@ -677,13 +688,21 @@ ini_set( 'default_charset', 'UTF-8' );
                 for($i=0;$i<$this->bar_width-1;$i++){
                     $Str_line .= $this->Full_block;
                 }
-                
+                //Quadrant_lower_left
                 $Str_line .= $this->Left_half_block;
 
                 $Str_line .= chr(27).'[0m';
             } else {
-                for($i=0;$i<$this->bar_width;$i++){
-                    $Str_line .= $chr_underlines; // Fill with graph char code of ' '
+                if($this->graph_length-1 == $id_line && in_array($key, $this->arr_id_data_visible)){
+                    // We need to draw someting to show the value exists, unless is 0
+                    for($i=0;$i<$this->bar_width-1;$i++){
+                        $Str_line .= $this->Lower_half_block;
+                    }
+                    $Str_line .= $this->Lower_half_block; //$this->Quadrant_lower_left; // dont work ????
+                } else {
+                    for($i=0;$i<$this->bar_width;$i++){
+                        $Str_line .= $chr_underlines; // Fill with graph char code of ' '
+                    }
                 }
             }
         }
