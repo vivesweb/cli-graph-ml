@@ -1,7 +1,7 @@
 # CLI PHP Graph Bars for Machine Learning with Outliers alert
 CLI PHP for visualize Machine learning datasets in Graph bar format. Detect Outliers. See your data before Training
 
-## V.1.0.1
+## V.1.0.2
 
 Before training processes at Deep Learning, the most hard work is to have a good datasets in its structure. Always we need to check the datasets before and if we see the data in graphs bars is more easy to detect outliers. This php class helps you to detect it with a shortest time. The class alert you about outliers with Red Bars.
 
@@ -163,6 +163,19 @@ If you do not want to see the values under the graph, you can hide it. If you hi
 Example:
 
         $bar_graph->set_explain_values( false ); // No show explain values
+
+
+- **SHOW 0 VALUES:**
+
+If you need to teach a value 0 to be visible, you can create an array of column id's where to show the value even if it is 0 to be able to visualize it. In this case, if the field should be visible, half a gray box will be shown, indicating that the value is 0, but that there is
+
+*set_arr_id_data_visible( $arr_id_data_visible )*
+
+Example:
+
+	// Show 0 values con cols id[0] & id[3]
+	$arr_id_data_visible = [0, 3];
+        $bar_graph->set_arr_id_data_visible($arr_id_data_visible);
 
 
 
