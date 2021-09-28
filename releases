@@ -1,3 +1,6 @@
+2021-09-28 v.1.0.2
+- Add feautre of represent 0 values with semi block in gray color
+
 2021-09-27 v.1.0.1
 - Bug solved on Axis Y values lower than 10
 - Bug solved when all bar will full or empty
