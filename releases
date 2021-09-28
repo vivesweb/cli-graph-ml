@@ -1,6 +1,7 @@
 2021-09-27 v.1.0.1
 - Bug solved on Axis Y values lower than 10
 - Bug solved when all bar will full or empty
+- Better visualization data on Sum & Avg formatting now to 2 decimals
 
 2021-09-26 v.1.0.0
 First release
