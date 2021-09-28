@@ -807,8 +807,8 @@ ini_set( 'default_charset', 'UTF-8' );
 
             $arr_explain[] = 'Max '.max($this->data);
             $arr_explain[] = 'Min '.min($this->data);
-            $arr_explain[] = 'Sum '.$Sum;
-            $arr_explain[] = 'Avg '.$avg;
+            $arr_explain[] = 'Sum '.number_format($Sum, 2, '.', '');
+            $arr_explain[] = 'Avg '.number_format($avg, 2, '.', '');
             $arr_explain[] = 'Median '.number_format($median, 2, '.', '');
             $arr_explain[] = 'Vari '.number_format($vari, 2, '.', '');
             $arr_explain[] = 'Std Dsv '.number_format($std, 2, '.', '');
