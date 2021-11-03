@@ -32,6 +32,8 @@ Screenshot of custom bar charts in CLI PHP environtment
     - VirtualBox Ubuntu Server 20.04.2 LTS (Focal Fossa) with PHP7.4.3 
     
     - Ubuntu 20.04.3 LTS (Focal Fossa). Laptop Acer Extensa 5630 with PHP 7.4.3 (cli) (built: Aug 13 2021 05:39:12) ( NTS )
+
+    - Windows 10 21H1 with PHP 7.4. By https://github.com/bozhinov
  
  
   # FILES:
