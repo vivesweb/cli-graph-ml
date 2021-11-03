@@ -1,3 +1,6 @@
+2021-03-11 v.1.0.3
+- Some minor changes to clean code. By https://github.com/bozhinov
+
 2021-09-28 v.1.0.2
 - Add feautre of represent 0 values with semi block in gray color with the new method set_arr_id_data_visible()
 
