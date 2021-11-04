@@ -666,7 +666,7 @@ ini_set('default_charset', 'UTF-8');
 	}
 
 	private function custom_left_append($left, $string){
-		 $this->arr_output[] = $left.$string.$this->padding_right;
+		$this->arr_output[] = $left.$string.$this->padding_right;
 	}
 
 	private function default_padded($string){
@@ -756,7 +756,7 @@ ini_set('default_charset', 'UTF-8');
         // Get array of string graph
 		$str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
 		$chr_border_left = $this->border_chars[$this->get_cfg_param('border_chars')]['left'];
-		$y_blocks = (($this->max_value-$this->min_value) / $this->graph_length);
+		$y_blocks = ($this->max_value - $this->min_value) / $this->graph_length;
         $max_y_length = strlen($this->max_value);
         // if is <10, we need to add 1 decimal. Then the strlen is added with decimal separator and one number
         if($this->max_value - $this->min_value < 10){
