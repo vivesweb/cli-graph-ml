@@ -282,20 +282,13 @@ ini_set('default_charset', 'UTF-8');
 
     public function __construct( $data = null, $axis_x_values = null, $config = null) {
 
-		if(!is_null($config)){
-        	$this->set_config($config);
-        }
+		(!is_null($config)) AND $this->set_config($config);
 
         $this->graph_length = $this->get_cfg_param('graph_length');
         $this->bar_width = $this->get_cfg_param('bar_width');
 
-		if(!is_null($data)){
-        	$this->set_data($data);
-        }
-
-		if(!is_null($axis_x_values)){
-        	$this->set_axis_x_values($axis_x_values);
-        }
+		(!is_null($data)) AND $this->set_data($data);
+		(!is_null($axis_x_values)) AND $this->set_axis_x_values($axis_x_values);
 
         $this->Upper_half_block                                     = html_entity_decode('▀', ENT_NOQUOTES, 'UTF-8');
         $this->Lower_one_eighth_block                               = html_entity_decode('▁', ENT_NOQUOTES, 'UTF-8');
