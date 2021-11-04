@@ -666,7 +666,8 @@ ini_set('default_charset', 'UTF-8');
 		return str_pad($string, $this->data_width + 3, ' ', STR_PAD_BOTH);
 	}
 
-	private function explain_append(){
+	# We need this to populate outl_up_limit & outl_down_limit
+	private function prepare_explain(){
 		$sum = array_sum($this->data);
 		$avg = $sum / $this->count_data;
 		$arr_sort = $this->data;
@@ -686,19 +687,27 @@ ini_set('default_charset', 'UTF-8');
 		$this->outl_up_limit = $avg + $std * $this->outlier_factor;
 		$this->outl_down_limit = $avg - $std * $this->outlier_factor;
 
-		$avg = number_format($avg, 2, '.', '');
+		return [
+			'Sum' => $sum,
+			'Avg' => $avg,
+			'Median' => $median,
+			'Vari' => $vari,
+			'Std Dsv' => $std,
+			'O ^ Lim' => $this->outl_up_limit,
+			'O v Lim' => $this->outl_down_limit
+		];
+	}
+
+	private function append_explain($arr){
 
 		$arr_explain = [
-			'Max '.max($this->data),
-			'Min '.min($this->data),
-			'Sum '.number_format($sum, 2, '.', ''),
-			'Avg '.number_format($avg, 2, '.', ''),
-			'Median '.number_format($median, 2, '.', ''),
-			'Vari '.number_format($vari, 2, '.', ''),
-			'Std Dsv '.number_format($std, 2, '.', ''),
-			'O ^ Lim '.number_format($this->outl_up_limit, 2, '.', ''),
-			'O v Lim '.number_format($this->outl_down_limit, 2, '.', '')
+			'Max '.$this->max_value,
+			'Min '.$this->min_value
 		];
+
+		foreach($arr as $val => $num){
+			$arr_explain[] = $val." ".number_format($num, 2, '.', '');		
+		}
 
 		if($this->get_cfg_param('explain_values_same_line')){
 			// For compatibility with other functions, we need to cut the line if overrides de width capacity
@@ -719,11 +728,10 @@ ini_set('default_charset', 'UTF-8');
      * Prepare Output in Array
      */
     public function prepare_array_output(){
-		
-		$this->prepare_default_append();
-		$this->arr_output = [];
 
-		// Prepare Graph Lines
+		$this->arr_output = [];
+		$this->prepare_default_append();
+		$explain = $this->prepare_explain();
 		$this->prepare_graph_lines();
 
 		// Padding Top
@@ -785,7 +793,7 @@ ini_set('default_charset', 'UTF-8');
 
 		// Explain Values
 		if($this->get_cfg_param('explain_values')){
-			$this->explain_append();
+			$this->append_explain($explain);
 		} // /Explain Values
 
 		// Padding Bottom
