@@ -721,79 +721,79 @@ ini_set('default_charset', 'UTF-8');
     public function prepare_array_output(){
 		
 		$this->prepare_default_append();
-        $this->arr_output = [];
+		$this->arr_output = [];
 
-        // Prepare Graph Lines
-        $this->prepare_graph_lines();
+		// Prepare Graph Lines
+		$this->prepare_graph_lines();
 
-        // Padding Top
+		// Padding Top
 		$padding_top = $this->get_cfg_param('padding_top');
-        for($i = $padding_top; $i > 0; $i--){
+		for($i = $padding_top; $i > 0; $i--){
 			 // +1 = vertical col axis separator, +2 = free space left and right
 			$this->default_append($this->default_padded(''));
-        }
-        // Graph Title
+		}
+		// Graph Title
 		// +1 = vertical col axis separator, +2 = free space left and right
 		$this->default_append($this->default_padded($this->get_cfg_param('title')));
 
-        // Down border line
-        if($this->get_cfg_param('draw_underlines')){
+		// Down border line
+		if($this->get_cfg_param('draw_underlines')){
 			$this->default_append($this->get_up_border());
-        }
+		}
 
-        // Axis X Title
-        if($this->get_cfg_param('show_y_axis_title')){
-            $str_pad_axis_y_title = str_pad($this->get_cfg_param('y_axis_title'), $this->graph_length, ' ', STR_PAD_BOTH);
-        }
+		// Axis X Title
+		if($this->get_cfg_param('show_y_axis_title')){
+			$str_pad_axis_y_title = str_pad($this->get_cfg_param('y_axis_title'), $this->graph_length, ' ', STR_PAD_BOTH);
+		}
 
-        // Get array of string graph
+		// Get array of string graph
 		$str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
 		$chr_border_left = $this->border_chars[$this->get_cfg_param('border_chars')]['left'];
 		$y_blocks = ($this->max_value - $this->min_value) / $this->graph_length;
-        $max_y_length = strlen($this->max_value);
-        // if is <10, we need to add 1 decimal. Then the strlen is added with decimal separator and one number
-        if($this->max_value - $this->min_value < 10){
-            $max_y_length += 2;
-        }
+		$max_y_length = strlen($this->max_value);
+		// if is <10, we need to add 1 decimal. Then the strlen is added with decimal separator and one number
+		if($this->max_value - $this->min_value < 10){
+			$max_y_length += 2;
+		}
 
-        for($i = 0; $i < $this->graph_length; $i++){
-            if($this->max_value - $this->min_value < 10){
-                $value_y = number_format($this->max_value - $y_blocks * $i, 1, '.', '' );
-            } else {
-                $value_y = (int)($this->max_value - $y_blocks * $i);
-            }
-            $value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
-            $str_char_title_y_loop = ($this->get_cfg_param('show_y_axis_title')) ? $str_pad_axis_y_title[$i].' ' : '';
-            $chr_underlines = ($this->get_cfg_param('draw_underlines') && (($i + 1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
-	
-            $this->custom_left_append($str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left, $chr_underlines.$this->get_graph_line($i).$chr_underlines);
-        }
+		for($i = 0; $i < $this->graph_length; $i++){
+			if($this->max_value - $this->min_value < 10){
+				$value_y = number_format($this->max_value - $y_blocks * $i, 1, '.', '' );
+			} else {
+				$value_y = (int)($this->max_value - $y_blocks * $i);
+			}
+			$value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
+			$str_char_title_y_loop = ($this->get_cfg_param('show_y_axis_title')) ? $str_pad_axis_y_title[$i].' ' : '';
+			$chr_underlines = ($this->get_cfg_param('draw_underlines') && (($i + 1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
 
-        // Down border line
+			$this->custom_left_append($str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left, $chr_underlines.$this->get_graph_line($i).$chr_underlines);
+		}
+
+		// Down border line
 		$this->default_append($this->get_down_border());
 
-        // Axis X Separators |
+		// Axis X Separators |
 		$this->default_append('  '.$this->get_axis_x_separators().' ');
-        // Axis X Values
+		// Axis X Values
 		$this->default_append(' '.$this->get_axis_x_values());
 
-        // Axis X Title
-        if($this->get_cfg_param('show_x_axis_title')){
+		// Axis X Title
+		if($this->get_cfg_param('show_x_axis_title')){
 			// +1 = vertical col axis separator, +2 = free space left and right
 			$this->default_append($this->default_padded($this->get_cfg_param('x_axis_title')));
-        }
+		}
 
-        // Explain Values
-        if($this->get_cfg_param('explain_values')){
+		// Explain Values
+		if($this->get_cfg_param('explain_values')){
 			$this->explain_append();
-        } // /Explain Values
+		} // /Explain Values
 
-        // Padding Bottom
+		// Padding Bottom
 		$padding_bottom = $this->get_cfg_param('padding_bottom');
-        for($i = $padding_bottom; $i > 0; $i--){
+		for($i = $padding_bottom; $i > 0; $i--){
 			 // +1 = vertical col axis separator, +2 = free space left and right
 			$this->default_append($this->default_padded(''));
-        }
+		}
 
     } // /prepare_array_output()
 
