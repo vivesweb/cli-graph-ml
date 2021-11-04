@@ -90,37 +90,37 @@ ini_set('default_charset', 'UTF-8');
 
  class cli_graph_ml
  {
-    private $Upper_half_block;
-    private $Lower_one_eighth_block;
-    private $Lower_one_quarter_block;
-    private $Lower_three_eighths_block;
-    private $Lower_half_block;
-    private $Lower_five_eighths_block;
-    private $Lower_three_quarters_block;
-    private $Lower_seven_eighths_block;
-    private $Full_block;
-    private $Left_seven_eighths_block;
-    private $Left_three_quarters_block;
-    private $Left_five_eighths_block;
-    private $Left_half_block;
-    private $Left_three_eighths_block;
-    private $Left_one_quarter_block;
-    private $Left_one_eighth_block;
-    private $Right_half_block;
-    private $Light_shade;
-    private $Medium_shade;
-    private $Upper_one_eighth_block;
-    private $Right_one_eighth_block;
-    private $Quadrant_lower_left;
-    private $Quadrant_lower_right;
-    private $Quadrant_upper_left;
-    private $Quadrant_upper_left_and_lower_left_and_lower_right;
-    private $Quadrant_upper_left_and_lower_right;
-    private $Quadrant_upper_left_and_upper_right_and_lower_left;
-    private $Quadrant_upper_left_and_upper_right_and_lower_right;
-    private $Quadrant_upper_right;
-    private $Quadrant_upper_right_and_lower_left;
-    private $Quadrant_upper_right_and_lower_left_and_lower_right;
+	private $Upper_half_block;
+	private $Lower_one_eighth_block;
+	private $Lower_one_quarter_block;
+	private $Lower_three_eighths_block;
+	private $Lower_half_block;
+	private $Lower_five_eighths_block;
+	private $Lower_three_quarters_block;
+	private $Lower_seven_eighths_block;
+	private $Full_block;
+	private $Left_seven_eighths_block;
+	private $Left_three_quarters_block;
+	private $Left_five_eighths_block;
+	private $Left_half_block;
+	private $Left_three_eighths_block;
+	private $Left_one_quarter_block;
+	private $Left_one_eighth_block;
+	private $Right_half_block;
+	private $Light_shade;
+	private $Medium_shade;
+	private $Upper_one_eighth_block;
+	private $Right_one_eighth_block;
+	private $Quadrant_lower_left;
+	private $Quadrant_lower_right;
+	private $Quadrant_upper_left;
+	private $Quadrant_upper_left_and_lower_left_and_lower_right;
+	private $Quadrant_upper_left_and_lower_right;
+	private $Quadrant_upper_left_and_upper_right_and_lower_left;
+	private $Quadrant_upper_left_and_upper_right_and_lower_right;
+	private $Quadrant_upper_right;
+	private $Quadrant_upper_right_and_lower_left;
+	private $Quadrant_upper_right_and_lower_left_and_lower_right;
 
     /**
      * Border Characters
@@ -261,32 +261,40 @@ ini_set('default_charset', 'UTF-8');
         'explain_values_same_line' => false
     ]; // /$default_cfg
 
-    private $data = [];
-    private $count_data;
-    private $arr_output = [];
-    private $axis_x_values;
+	private $data = [];
+	private $count_data;
+	private $data_width;
+	private $bar_width = 1;
+	private $padding_left;
+	private $padding_right;
+	private $arr_output = [];
+	private $axis_x_values;
 
-    private $graph_length;
-    private $max_value;
-    private $min_value;
-    private $arr_prepare_output = [];
+	private $graph_length;
+	private $max_value;
+	private $min_value;
+	private $arr_prepare_output = [];
 
-    private $outlier_factor = 2;
-    private $outl_up_limit = 0;
-    private $outl_down_limit = 0;
-    private $arr_id_data_visible = []; // Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
+	private $outlier_factor = 2;
+	private $outl_up_limit = 0;
+	private $outl_down_limit = 0;
+	private $arr_id_data_visible = []; // Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
 
     public function __construct( $data = null, $axis_x_values = null, $config = null) {
-		if( !is_null($config) ){
-        	$this->set_config( $config );
+
+		if(!is_null($config)){
+        	$this->set_config($config);
         }
 
-		if( !is_null($data) ){
-        	$this->set_data( $data );
+        $this->graph_length = $this->get_cfg_param('graph_length');
+        $this->bar_width = $this->get_cfg_param('bar_width');
+
+		if(!is_null($data)){
+        	$this->set_data($data);
         }
 
-		if( !is_null($axis_x_values) ){
-        	$this->set_axis_x_values( $axis_x_values );
+		if(!is_null($axis_x_values)){
+        	$this->set_axis_x_values($axis_x_values);
         }
 
         $this->Upper_half_block                                     = html_entity_decode('▀', ENT_NOQUOTES, 'UTF-8');
@@ -320,20 +328,18 @@ ini_set('default_charset', 'UTF-8');
         $this->Quadrant_upper_right                                 = html_entity_decode('▝', ENT_NOQUOTES, 'UTF-8');
         $this->Quadrant_upper_right_and_lower_left                  = html_entity_decode('▞', ENT_NOQUOTES, 'UTF-8');
         $this->Quadrant_upper_right_and_lower_left_and_lower_right  = html_entity_decode('▟', ENT_NOQUOTES, 'UTF-8');
-
-        $this->graph_length = $this->get_cfg_param('graph_length');
-        $this->bar_width = $this->get_cfg_param('bar_width');
 	} // / __construct
 
     /**
      * Set DATA
      * @param array $data
      */
-    public function set_data( $data ){
+    public function set_data($data){
         $this->data = $data;
-        $this->count_data = count( $this->data );
-        $this->max_value = max( $this->data );
-        $this->min_value = min( $this->data );
+        $this->count_data = count($this->data);
+        $this->max_value = max($this->data);
+        $this->min_value = min($this->data);
+		$this->data_width = $this->count_data * $this->bar_width;
     }// /set_data()
 
     /**
@@ -502,6 +508,7 @@ ini_set('default_charset', 'UTF-8');
      */
     public function set_bar_width( $bar_width = 1 ){
         $this->bar_width = $bar_width;
+		$this->data_width = $this->count_data * $bar_width;
     } // /set_bar_width()
 
     /**
@@ -526,7 +533,7 @@ ini_set('default_charset', 'UTF-8');
      * @return string $param
      */
     private function get_cfg_param( $param ){
-        return ((isset($this->config[$param]))?$this->config[$param]:$this->default_cfg[$param]);
+        return (isset($this->config[$param])) ? $this->config[$param] : $this->default_cfg[$param];
     }// /get_cfg_param()
 
     /**
@@ -535,14 +542,12 @@ ini_set('default_charset', 'UTF-8');
      * @return string $border
      */
     private function get_down_border(){
-        $border_cfg = $this->border_chars[$this->get_cfg_param( 'border_chars' )];
+        $border_cfg = $this->border_chars[$this->get_cfg_param('border_chars')];
 
-        $chr_corner = html_entity_decode( $border_cfg['bottom-left'], ENT_NOQUOTES, 'UTF-8');
-        $chr_line   = html_entity_decode( $border_cfg['bottom'], ENT_NOQUOTES, 'UTF-8');
+        $chr_corner = html_entity_decode($border_cfg['bottom-left'], ENT_NOQUOTES, 'UTF-8');
+        $chr_line   = html_entity_decode($border_cfg['bottom'], ENT_NOQUOTES, 'UTF-8');
 
-        unset( $border_cfg );
-
-        return $chr_corner.str_pad( '', $this->count_data*$this->bar_width+2, $chr_line); // +2 free space left & right
+        return $chr_corner.str_pad('', $this->data_width + 2, $chr_line); // +2 free space left & right
     } // /get_down_border()
 
     /**
@@ -554,7 +559,7 @@ ini_set('default_charset', 'UTF-8');
         $chr_corner = ' ';
         $chr_line   = '_';
 
-        return $chr_corner.str_pad( '', $this->count_data*$this->bar_width+2, $chr_line); // +2 = free space left and right
+        return $chr_corner.str_pad( '', $this->data_width + 2, $chr_line); // +2 = free space left and right
     } // /get_up_border()
 
     /**
@@ -563,7 +568,7 @@ ini_set('default_charset', 'UTF-8');
      * @return string $str_axis_x_values
      */
     private function get_axis_x_values(){
-        return $this->justify(implode(' ', $this->axis_x_values), $this->count_data*$this->bar_width + 2 ); // The left and right margin of the graph will be used
+        return $this->justify(implode(' ', $this->axis_x_values), $this->data_width + 2 ); // The left and right margin of the graph will be used
     } // /get_axis_x_values()
 
     /**
@@ -574,7 +579,7 @@ ini_set('default_charset', 'UTF-8');
      */
     private function get_axis_x_separators(){
         $arr_separators = array_fill(0, count($this->axis_x_values), '|');
-        return $this->justify(implode(' ', $arr_separators), $this->count_data*$this->bar_width);
+        return $this->justify(implode(' ', $arr_separators), $this->data_width);
     } // /get_axis_x_separators()
 
     /**
@@ -583,8 +588,8 @@ ini_set('default_charset', 'UTF-8');
     private function prepare_graph_lines(){
         $this->arr_prepare_output = [];
 
-        for( $i=0; $i<$this->count_data; $i++ ){
-            $full = (int) ($this->data[$i] * ($this->graph_length) / $this->max_value);
+        for( $i=0; $i < $this->count_data; $i++ ){
+            $full = (int) ($this->data[$i] * $this->graph_length / $this->max_value);
             $empty = $this->graph_length - $full;
 
             $StrPrepare = '';
@@ -643,139 +648,158 @@ ini_set('default_charset', 'UTF-8');
         return $Str_line;
     } // /get_graph_line()
 
+	private function prepare_default_append(){
+        // Blank space of left values
+        $str_blank_left_values = str_repeat(' ', strlen($this->max_value));
+
+        // Blank char for title Axis Y
+		// One space for the title & other for separate from 'Axis Y' values
+        $str_char_title_y = ($this->get_cfg_param('show_y_axis_title')) ? '  ' : ''; 
+        $str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
+
+		$this->padding_left = $str_padding_left.$str_char_title_y.$str_blank_left_values;
+        $this->padding_right = str_repeat(' ', $this->get_cfg_param('padding_right'));
+	}
+
+	private function default_append($string){
+		 $this->arr_output[] = $this->padding_left.$string.$this->padding_right;
+	}
+
+	private function custom_left_append($left, $string){
+		 $this->arr_output[] = $left.$string.$this->padding_right;
+	}
+
+	private function default_padded($string){
+		return str_pad($string, $this->data_width + 3, ' ', STR_PAD_BOTH);
+	}
+
+	private function explain_append(){
+		$sum = array_sum($this->data);
+		$avg = $sum / $this->count_data;
+		$arr_sort = $this->data;
+		$pos_median = ($this->count_data + 1) / 2;
+		sort($arr_sort, SORT_NUMERIC);
+		$median = (double)((($this->count_data % 2 != 0)) ? $arr_sort[$pos_median - 1] : ($arr_sort[$pos_median - 1] + $arr_sort[$pos_median]) / 2);
+		$sum_median = 0;
+
+		for($i=0; $i < $this->count_data; $i++){
+			$substract = $this->data[$i] - $avg;
+			$sum_median += $substract * $substract; // pow($substract, 2);
+		}
+
+		$vari = $sum_median/$this->count_data;
+		$std = sqrt($vari);
+
+		$this->outl_up_limit = $avg + $std * $this->outlier_factor;
+		$this->outl_down_limit = $avg - $std * $this->outlier_factor;
+
+		$avg = number_format($avg, 2, '.', '');
+
+		$arr_explain = [
+			'Max '.max($this->data),
+			'Min '.min($this->data),
+			'Sum '.number_format($sum, 2, '.', ''),
+			'Avg '.number_format($avg, 2, '.', ''),
+			'Median '.number_format($median, 2, '.', ''),
+			'Vari '.number_format($vari, 2, '.', ''),
+			'Std Dsv '.number_format($std, 2, '.', ''),
+			'O ^ Lim '.number_format($this->outl_up_limit, 2, '.', ''),
+			'O v Lim '.number_format($this->outl_down_limit, 2, '.', '')
+		];
+
+		if($this->get_cfg_param('explain_values_same_line')){
+			// For compatibility with other functions, we need to cut the line if overrides de width capacity
+			$str_cutted = str_pad(implode( ', ', $arr_explain), $this->data_width + 2, ' ', STR_PAD_RIGHT);
+			if( strlen($str_cutted) > $this->data_width + 2){
+				$str_cutted = substr( $str_cutted, 0, $this->data_width + 1);
+				$str_cutted .= chr(27).'[0;31m'.'>'.chr(27).'[0m'.' '; // Indicate that the values continue
+			}
+			$this->default_append(' '.$str_cutted);
+		} else {
+			foreach($arr_explain as $explain){
+				$this->default_append(' '.str_pad($explain, $this->data_width + 2, ' ', STR_PAD_RIGHT));
+			}
+		}
+	}
+
     /**
      * Prepare Output in Array
      */
     public function prepare_array_output(){
+		
+		$this->prepare_default_append();
         $this->arr_output = [];
 
-        $border_cfg = $this->border_chars[$this->get_cfg_param( 'border_chars' )];
-        $chr_border_left = $border_cfg['left'];
+        // Prepare Graph Lines
+        $this->prepare_graph_lines();
 
-        $y_blocks = (($this->max_value-$this->min_value) / $this->graph_length);
+        // Padding Top
+		$padding_top = $this->get_cfg_param('padding_top');
+        for($i = $padding_top; $i > 0; $i--){
+			 // +1 = vertical col axis separator, +2 = free space left and right
+			$this->default_append($this->default_padded(''));
+        }
+        // Graph Title
+		// +1 = vertical col axis separator, +2 = free space left and right
+		$this->default_append($this->default_padded($this->get_cfg_param('title')));
+
+        // Down border line
+        if($this->get_cfg_param('draw_underlines')){
+			$this->default_append($this->get_up_border());
+        }
+
+        // Axis X Title
+        if($this->get_cfg_param('show_y_axis_title')){
+            $str_pad_axis_y_title = str_pad($this->get_cfg_param('y_axis_title'), $this->graph_length, ' ', STR_PAD_BOTH);
+        }
+
+        // Get array of string graph
+		$str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
+		$chr_border_left = $this->border_chars[$this->get_cfg_param('border_chars')]['left'];
+		$y_blocks = (($this->max_value-$this->min_value) / $this->graph_length);
         $max_y_length = strlen($this->max_value);
         // if is <10, we need to add 1 decimal. Then the strlen is added with decimal separator and one number
         if($this->max_value - $this->min_value < 10){
             $max_y_length += 2;
         }
 
-        // Padding left
-        $str_padding_left = str_repeat(' ', $this->get_cfg_param( 'padding_left' ));
-
-        // Blank space of left values
-        $str_blank_left_values = str_repeat(' ', $max_y_length);
-
-        // Bolank char for title Axis Y
-        $str_char_title_y = (( $this->get_cfg_param( 'show_y_axis_title' ))?'  ':''); // One space for the title & other for separate from 'Axis Y' values
-
-        // Padding right
-        $str_padding_right= str_repeat(' ', $this->get_cfg_param( 'padding_right' ));
-
-        // Som math calcs
-        if( $this->get_cfg_param( 'explain_values' ) ){
-            $Sum = array_sum($this->data);
-            $avg = $Sum / $this->count_data;
-            $arr_sort = $this->data;
-            $pos_median = ($this->count_data + 1) / 2;
-            sort($arr_sort, SORT_NUMERIC );
-            $median = (double)((($this->count_data % 2 != 0)) ? $arr_sort[$pos_median - 1] : ($arr_sort[$pos_median - 1] + $arr_sort[$pos_median]) / 2);
-            $sum_median = 0;
-
-            for($i=0; $i<$this->count_data;$i++){
-                $substract = $this->data[$i] - $avg;
-				$sum_median += $substract * $substract; // pow($substract, 2);
-            }
-
-            $vari = $sum_median/$this->count_data;
-            $std = sqrt($vari);
-
-            $this->outl_up_limit = $avg + $std * $this->outlier_factor;
-            $this->outl_down_limit = $avg - $std * $this->outlier_factor;
-
-            $avg = number_format($avg, 2, '.', '');
-        }
-
-        // Prepare Graph Lines
-        $this->prepare_graph_lines();
-
-		$left = $str_padding_left.$str_char_title_y.$str_blank_left_values;
-
-        // Padding Top
-        for( $i=$this->get_cfg_param( 'padding_top' ); $i> 0; $i-- ){
-            $this->arr_output[] = $left.str_pad('', $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
-        }
-        // Graph Title
-        $this->arr_output[] = $left.str_pad($this->get_cfg_param( 'title' ), $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
-
-        // Down border line
-        if( $this->get_cfg_param( 'draw_underlines' ) ){
-            $this->arr_output[] = $left.$this->get_up_border().$str_padding_right;
-        }
-
-        // Axis X Title
-        if( $this->get_cfg_param( 'show_y_axis_title' ) ){
-            $str_pad_axis_y_title = str_pad($this->get_cfg_param( 'y_axis_title' ), $this->graph_length, ' ', STR_PAD_BOTH);
-        }
-
-        // Get array of string graph
-        for($i=0; $i<$this->graph_length;$i++){
+        for($i = 0; $i < $this->graph_length; $i++){
             if($this->max_value - $this->min_value < 10){
-                $value_y = number_format($this->max_value-$y_blocks*$i, 1, '.', '' );
+                $value_y = number_format($this->max_value - $y_blocks * $i, 1, '.', '' );
             } else {
-                $value_y = (int)($this->max_value-$y_blocks * $i);
+                $value_y = (int)($this->max_value - $y_blocks * $i);
             }
             $value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
-            $str_char_title_y_loop = (( $this->get_cfg_param( 'show_y_axis_title' ))?$str_pad_axis_y_title[$i].' ':'');
-            $chr_underlines = (( $this->get_cfg_param( 'draw_underlines') && (($i+1)%$this->get_cfg_param( 'underlines_every') == 0))?'_':' ');
-
-            $this->arr_output[] = $str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left.$chr_underlines.$this->get_graph_line($i).$chr_underlines.$str_padding_right;
+            $str_char_title_y_loop = ($this->get_cfg_param('show_y_axis_title')) ? $str_pad_axis_y_title[$i].' ' : '';
+            $chr_underlines = ($this->get_cfg_param('draw_underlines') && (($i + 1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
+	
+            $this->custom_left_append($str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left, $chr_underlines.$this->get_graph_line($i).$chr_underlines);
         }
 
         // Down border line
-        $this->arr_output[] = $left.$this->get_down_border().$str_padding_right;
+		$this->default_append($this->get_down_border());
 
         // Axis X Separators |
-        $this->arr_output[] = $left.'  '.$this->get_axis_x_separators().' '.$str_padding_right;
+		$this->default_append('  '.$this->get_axis_x_separators().' ');
         // Axis X Values
-        $this->arr_output[] = $left.' '.$this->get_axis_x_values().$str_padding_right;
+		$this->default_append(' '.$this->get_axis_x_values());
 
         // Axis X Title
-        if( $this->get_cfg_param( 'show_x_axis_title' ) ){
-            $this->arr_output[] = $left.str_pad($this->get_cfg_param( 'x_axis_title' ), $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
+        if($this->get_cfg_param('show_x_axis_title')){
+			// +1 = vertical col axis separator, +2 = free space left and right
+			$this->default_append($this->default_padded($this->get_cfg_param('x_axis_title')));
         }
 
         // Explain Values
-        if( $this->get_cfg_param( 'explain_values' ) ){
-            $arr_explain = [
-				'Max '.max($this->data),
-				'Min '.min($this->data),
-				'Sum '.number_format($Sum, 2, '.', ''),
-				'Avg '.number_format($avg, 2, '.', ''),
-				'Median '.number_format($median, 2, '.', ''),
-				'Vari '.number_format($vari, 2, '.', ''),
-				'Std Dsv '.number_format($std, 2, '.', ''),
-				'O ^ Lim '.number_format($this->outl_up_limit, 2, '.', ''),
-				'O v Lim '.number_format($this->outl_down_limit, 2, '.', '')
-			];
-
-            if( $this->get_cfg_param( 'explain_values_same_line' ) ){
-                // For compatibility with other functions, we need to cut the line if overrides de width capacity
-                $str_cutted = str_pad(implode( ', ', $arr_explain), $this->count_data * $this->bar_width  + 2, ' ', STR_PAD_RIGHT);
-                if( strlen($str_cutted) > $this->count_data * $this->bar_width + 2){
-                    $str_cutted = substr( $str_cutted, 0, $this->count_data * $this->bar_width + 1);
-                    $str_cutted .= chr(27).'[0;31m'.'>'.chr(27).'[0m'.' '; // Indicate that the values continue
-                }
-                $this->arr_output[] = $left.' '.$str_cutted.$str_padding_right;
-            } else {
-                foreach( $arr_explain as $explain ){
-                    $this->arr_output[] = $left.' '.str_pad($explain, $this->count_data * $this->bar_width + 2, ' ', STR_PAD_RIGHT).$str_padding_right;
-                }
-            }
+        if($this->get_cfg_param('explain_values')){
+			$this->explain_append();
         } // /Explain Values
 
         // Padding Bottom
-        for( $i=$this->get_cfg_param( 'padding_bottom' ); $i>0; $i-- ){
-            $this->arr_output[] = $left.str_pad('', $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
+		$padding_bottom = $this->get_cfg_param('padding_bottom');
+        for($i = $padding_bottom; $i > 0; $i--){
+			 // +1 = vertical col axis separator, +2 = free space left and right
+			$this->default_append($this->default_padded(''));
         }
 
     } // /prepare_array_output()
@@ -786,7 +810,7 @@ ini_set('default_charset', 'UTF-8');
      * return integer $num_lines
      */
     public function count_output_lines(){
-        return count( $this->arr_output );
+        return count($this->arr_output);
     } // /count_output_lines()
 
     /**
@@ -800,25 +824,19 @@ ini_set('default_charset', 'UTF-8');
      * @param boolean $prepare_array_output
      */
     public function draw( $line_id = null, $do_line_break = true, $prepare_array_output = true ){
-        if( $prepare_array_output ){
+        if($prepare_array_output){
             $this->prepare_array_output();
         }
 
         if( is_null($line_id) ){
-            foreach( $this->arr_output as $output_line ){
+            foreach($this->arr_output as $output_line){
                 echo $output_line;
-
-                if( $do_line_break ){
-                    echo PHP_EOL;
-                }
+                if ($do_line_break) echo PHP_EOL;
             }
 
         } else {
-            echo $this->arr_output[ $line_id ];
-            
-            if( $do_line_break ){
-                echo PHP_EOL;
-            }
+            echo $this->arr_output[$line_id];
+            if ($do_line_break) echo PHP_EOL;
         }
     } // /draw()
 
