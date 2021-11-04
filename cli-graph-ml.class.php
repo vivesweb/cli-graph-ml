@@ -661,6 +661,7 @@ ini_set('default_charset', 'UTF-8');
 	}
 
 	private function default_padded($string){
+		// +1 = vertical col axis separator, +2 = free space left and right
 		return str_pad($string, $this->data_width + 3, ' ', STR_PAD_BOTH);
 	}
 
@@ -732,11 +733,9 @@ ini_set('default_charset', 'UTF-8');
 		// Padding Top
 		$padding_top = $this->get_cfg_param('padding_top');
 		for($i = $padding_top; $i > 0; $i--){
-			 // +1 = vertical col axis separator, +2 = free space left and right
 			$this->default_append($this->default_padded(''));
 		}
 		// Graph Title
-		// +1 = vertical col axis separator, +2 = free space left and right
 		$this->default_append($this->default_padded($this->get_cfg_param('title')));
 
 		// Down border line
@@ -792,7 +791,7 @@ ini_set('default_charset', 'UTF-8');
 		// Explain Values
 		if($this->get_cfg_param('explain_values')){
 			$this->append_explain($explain);
-		} // /Explain Values
+		}
 
 		// Padding Bottom
 		$padding_bottom = $this->get_cfg_param('padding_bottom');
