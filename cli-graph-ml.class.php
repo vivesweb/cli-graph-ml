@@ -1,5 +1,6 @@
 <?php
-ini_set( 'default_charset', 'UTF-8' );
+
+ini_set('default_charset', 'UTF-8');
 
 /** cli-graph-ml.class.php
  *  
@@ -88,38 +89,38 @@ ini_set( 'default_charset', 'UTF-8' );
  * */
 
  class cli_graph_ml
-    {
+ {
     private $Upper_half_block;
     private $Lower_one_eighth_block;
     private $Lower_one_quarter_block;
     private $Lower_three_eighths_block;
     private $Lower_half_block;
-    private $Lower_five_eighths_block; 
+    private $Lower_five_eighths_block;
     private $Lower_three_quarters_block;
-    private $Lower_seven_eighths_block; 
-    private $Full_block; 
-    private $Left_seven_eighths_block; 
-    private $Left_three_quarters_block; 
-    private $Left_five_eighths_block; 
-    private $Left_half_block; 
-    private $Left_three_eighths_block; 
-    private $Left_one_quarter_block; 
-    private $Left_one_eighth_block; 
-    private $Right_half_block; 
-    private $Light_shade; 
-    private $Medium_shade; 
+    private $Lower_seven_eighths_block;
+    private $Full_block;
+    private $Left_seven_eighths_block;
+    private $Left_three_quarters_block;
+    private $Left_five_eighths_block;
+    private $Left_half_block;
+    private $Left_three_eighths_block;
+    private $Left_one_quarter_block;
+    private $Left_one_eighth_block;
+    private $Right_half_block;
+    private $Light_shade;
+    private $Medium_shade;
     private $Upper_one_eighth_block;
     private $Right_one_eighth_block;
-    private $Quadrant_lower_left; 
-    private $Quadrant_lower_right; 
+    private $Quadrant_lower_left;
+    private $Quadrant_lower_right;
     private $Quadrant_upper_left;
     private $Quadrant_upper_left_and_lower_left_and_lower_right;
     private $Quadrant_upper_left_and_lower_right;
     private $Quadrant_upper_left_and_upper_right_and_lower_left;
     private $Quadrant_upper_left_and_upper_right_and_lower_right;
-    private $Quadrant_upper_right; 
-    private $Quadrant_upper_right_and_lower_left; 
-    private $Quadrant_upper_right_and_lower_left_and_lower_right ;
+    private $Quadrant_upper_right;
+    private $Quadrant_upper_right_and_lower_left;
+    private $Quadrant_upper_right_and_lower_left_and_lower_right;
 
     /**
      * Border Characters
@@ -201,8 +202,6 @@ ini_set( 'default_charset', 'UTF-8' );
             ]
     ]; // Border Chars
 
-
-
     /**
      * colors
      * chr(27).'[1;34m',
@@ -232,8 +231,6 @@ ini_set( 'default_charset', 'UTF-8' );
         'reset'         => '[0m',
     ]; // /$text_colors
 
-
-
     /**
      * Definition of Defaut Table Format values
      *
@@ -249,27 +246,26 @@ ini_set( 'default_charset', 'UTF-8' );
         'graph_length'  => 10,
         'bar_color'  => 'lightwhite',
         'title'  => '',
-        'draw_underlines'  => true,
+        'draw_underlines' => true,
         'underlines_every'  => 1,
         'bar_width'  => 1,
-        'show_y_axis_title'  => true,
-        'show_x_axis_title'  => true,
+        'show_y_axis_title' => true,
+        'show_x_axis_title' => true,
         'x_axis_title' => 'AXIS X',
         'y_axis_title' => 'AXIS Y',
-        'padding_left'  => 1,
-        'padding_right'  => 1,
-        'padding_top'  => 1,
-        'padding_bottom'  => 1,
-        'explain_values'  => true,
-        'explain_values_same_line'  => false        
+        'padding_left' => 1,
+        'padding_right' => 1,
+        'padding_top' => 1,
+        'padding_bottom' => 1,
+        'explain_values' => true,
+        'explain_values_same_line' => false
     ]; // /$default_cfg
-
 
     private $data = [];
     private $count_data;
     private $arr_output = [];
     private $axis_x_values;
-    
+
     private $graph_length;
     private $max_value;
     private $min_value;
@@ -279,8 +275,7 @@ ini_set( 'default_charset', 'UTF-8' );
     private $outl_up_limit = 0;
     private $outl_down_limit = 0;
     private $arr_id_data_visible = []; // Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
-   
-	
+
     public function __construct( $data = null, $axis_x_values = null, $config = null) {
 		if( !is_null($config) ){
         	$this->set_config( $config );
@@ -294,43 +289,41 @@ ini_set( 'default_charset', 'UTF-8' );
         	$this->set_axis_x_values( $axis_x_values );
         }
 
-        $this->Upper_half_block                                     = html_entity_decode('▀', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Lower_one_eighth_block                               = html_entity_decode('▁', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Lower_one_quarter_block                              = html_entity_decode('▂', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Lower_three_eighths_block                            = html_entity_decode('▃', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Lower_half_block                                     = html_entity_decode('▄', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Lower_five_eighths_block                             = html_entity_decode('▅', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Lower_three_quarters_block                           = html_entity_decode('▆', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Lower_seven_eighths_block                            = html_entity_decode('▇', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Full_block                                           = html_entity_decode('█', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Left_seven_eighths_block                             = html_entity_decode('▉', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Left_three_quarters_block                            = html_entity_decode('▊', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Left_five_eighths_block                              = html_entity_decode('▋', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Left_half_block                                      = html_entity_decode('▌', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Left_three_eighths_block                             = html_entity_decode('▍', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Left_one_quarter_block                               = html_entity_decode('▎', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Left_one_eighth_block                                = html_entity_decode('▏', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Right_half_block                                     = html_entity_decode('▐', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Light_shade                                          = html_entity_decode('░', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Medium_shade                                         = html_entity_decode('▒', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Upper_one_eighth_block                               = html_entity_decode('▔', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Right_one_eighth_block                               = html_entity_decode('▕', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_lower_left                                  = html_entity_decode('▖', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_lower_right                                 = html_entity_decode('▗', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_upper_left                                  = html_entity_decode('▘', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_upper_left_and_lower_left_and_lower_right   = html_entity_decode('▙', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_upper_left_and_lower_right                  = html_entity_decode('▚', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_upper_left_and_upper_right_and_lower_left   = html_entity_decode('▛', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_upper_left_and_upper_right_and_lower_right  = html_entity_decode('▜', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_upper_right                                 = html_entity_decode('▝', ENT_NOQUOTES, 'UTF-8'); 
-        $this->Quadrant_upper_right_and_lower_left                  = html_entity_decode('▞', ENT_NOQUOTES, 'UTF-8'); 
+        $this->Upper_half_block                                     = html_entity_decode('▀', ENT_NOQUOTES, 'UTF-8');
+        $this->Lower_one_eighth_block                               = html_entity_decode('▁', ENT_NOQUOTES, 'UTF-8');
+        $this->Lower_one_quarter_block                              = html_entity_decode('▂', ENT_NOQUOTES, 'UTF-8');
+        $this->Lower_three_eighths_block                            = html_entity_decode('▃', ENT_NOQUOTES, 'UTF-8');
+        $this->Lower_half_block                                     = html_entity_decode('▄', ENT_NOQUOTES, 'UTF-8');
+        $this->Lower_five_eighths_block                             = html_entity_decode('▅', ENT_NOQUOTES, 'UTF-8');
+        $this->Lower_three_quarters_block                           = html_entity_decode('▆', ENT_NOQUOTES, 'UTF-8');
+        $this->Lower_seven_eighths_block                            = html_entity_decode('▇', ENT_NOQUOTES, 'UTF-8');
+        $this->Full_block                                           = html_entity_decode('█', ENT_NOQUOTES, 'UTF-8');
+        $this->Left_seven_eighths_block                             = html_entity_decode('▉', ENT_NOQUOTES, 'UTF-8');
+        $this->Left_three_quarters_block                            = html_entity_decode('▊', ENT_NOQUOTES, 'UTF-8');
+        $this->Left_five_eighths_block                              = html_entity_decode('▋', ENT_NOQUOTES, 'UTF-8');
+        $this->Left_half_block                                      = html_entity_decode('▌', ENT_NOQUOTES, 'UTF-8');
+        $this->Left_three_eighths_block                             = html_entity_decode('▍', ENT_NOQUOTES, 'UTF-8');
+        $this->Left_one_quarter_block                               = html_entity_decode('▎', ENT_NOQUOTES, 'UTF-8');
+        $this->Left_one_eighth_block                                = html_entity_decode('▏', ENT_NOQUOTES, 'UTF-8');
+        $this->Right_half_block                                     = html_entity_decode('▐', ENT_NOQUOTES, 'UTF-8');
+        $this->Light_shade                                          = html_entity_decode('░', ENT_NOQUOTES, 'UTF-8');
+        $this->Medium_shade                                         = html_entity_decode('▒', ENT_NOQUOTES, 'UTF-8');
+        $this->Upper_one_eighth_block                               = html_entity_decode('▔', ENT_NOQUOTES, 'UTF-8');
+        $this->Right_one_eighth_block                               = html_entity_decode('▕', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_lower_left                                  = html_entity_decode('▖', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_lower_right                                 = html_entity_decode('▗', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_upper_left                                  = html_entity_decode('▘', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_upper_left_and_lower_left_and_lower_right   = html_entity_decode('▙', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_upper_left_and_lower_right                  = html_entity_decode('▚', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_upper_left_and_upper_right_and_lower_left   = html_entity_decode('▛', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_upper_left_and_upper_right_and_lower_right  = html_entity_decode('▜', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_upper_right                                 = html_entity_decode('▝', ENT_NOQUOTES, 'UTF-8');
+        $this->Quadrant_upper_right_and_lower_left                  = html_entity_decode('▞', ENT_NOQUOTES, 'UTF-8');
         $this->Quadrant_upper_right_and_lower_left_and_lower_right  = html_entity_decode('▟', ENT_NOQUOTES, 'UTF-8');
 
         $this->graph_length = $this->get_cfg_param('graph_length');
         $this->bar_width = $this->get_cfg_param('bar_width');
 	} // / __construct
-
-
 
     /**
      * Set DATA
@@ -343,8 +336,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->min_value = min( $this->data );
     }// /set_data()
 
-
-    
     /**
      * Set array of id's visibles even the value is 0
      * Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
@@ -354,7 +345,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->arr_id_data_visible = $arr_id_data_visible;
     }// /set_arr_id_data_visible()
 
-
     /**
      * Set EXPLAIN VALUES
      * @param boolean $explain_values
@@ -363,8 +353,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->config['explain_values'] = $explain_values;
     }// /set_explain_values()
 
-
-
     /**
      * Set BAR COLOR
      * @param string $bar_color
@@ -372,8 +360,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_bar_color( $bar_color = 'lightwhite' ){
         $this->config['bar_color'] = $bar_color;
     }// /set_bar_color()
-
-    
 
     /**
      * Set EXPLAIN VALUES SAME LINE
@@ -386,8 +372,6 @@ ini_set( 'default_charset', 'UTF-8' );
         }
     }// /set_explain_values_same_line()
 
-
-
     /**
      * Set Outlier Factor
      * @param double $outlier_factor
@@ -395,8 +379,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_outlier_factor( $outlier_factor = 2 ){
         $this->outlier_factor = $outlier_factor;
     }// /set_outlier_factor()
-
-
 
     /**
      * Set TITLE
@@ -406,7 +388,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->config['title'] = $title;
     }// /set_title()
 
-
     /**
      * Set draw underlines every x rows
      * @param integer $underlines_every
@@ -414,8 +395,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_underlines_every( $underlines_every = 1 ){
         $this->config['underlines_every'] = $underlines_every;
     }// /set_underlines_every()
-
-
 
     /**
      * Set X AXIS TITLE
@@ -425,8 +404,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->config['x_axis_title'] = $x_axis_title;
     }// /set_x_axis_title()
 
-
-
     /**
      * Set Y AXIS TITLE
      * @param string $y_axis_title
@@ -434,8 +411,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_y_axis_title( $y_axis_title = '' ){
         $this->config['y_axis_title'] = $y_axis_title;
     }// /set_y_axis_title()
-
-
 
     /**
      * Set SHOW X AXIS TITLE
@@ -445,8 +420,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->config['show_x_axis_title'] = $show_x_axis_title;
     }// /set_show_x_axis_title()
 
-
-
     /**
      * Set SHOW Y AXIS TITLE
      * @param boolean $show_y_axis_title
@@ -454,8 +427,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_show_y_axis_title( $show_y_axis_title = true ){
         $this->config['show_y_axis_title'] = $show_y_axis_title;
     }// /set_show_y_axis_title()
-
-
 
     /**
      * Set SHOW X,Y AXIS TITLE
@@ -465,8 +436,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->set_show_x_axis_title( $show_axis_titles );
         $this->set_show_y_axis_title( $show_axis_titles );
     }// /set_show_axis_titles()
-
-
 
     /**
      * Set PADDING
@@ -479,8 +448,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->set_bottom_padding( $padding );
     }// /set_padding()
 
-
-
     /**
      * Set SET LEFT PADDING
      * @param integer $left_padding
@@ -488,8 +455,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_left_padding( $left_padding = 1 ){
         $this->config['left_padding'] = $left_padding;
     }// /set_left_padding()
-
-
 
     /**
      * Set SET RIGHT PADDING
@@ -499,8 +464,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->config['right_padding'] = $right_padding;
     }// /set_right_padding()
 
-
-
     /**
      * Set SET TOP PADDING
      * @param integer $top_padding
@@ -508,8 +471,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_top_padding( $top_padding = 1 ){
         $this->config['top_padding'] = $top_padding;
     }// /set_top_padding()
-
-
 
     /**
      * Set SET BOTTOM PADDING
@@ -519,8 +480,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->config['bottom_padding'] = $bottom_padding;
     }// /set_bottom_padding()
 
-
-
     /**
      * Set Graph Length
      * @param integer $length
@@ -528,8 +487,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_graph_length( $length = 10 ){
         $this->graph_length = $length;
     }// /set_graph_length()
-
-
 
     /**
      * Set DRAW UNDERLINES
@@ -539,8 +496,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->config['draw_underlines'] = $draw_underlines;
     }// /set_draw_underlines()
 
-    
-
     /**
      * Set BAR WIDTH
      * @param integer $bar_width
@@ -548,8 +503,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_bar_width( $bar_width = 1 ){
         $this->bar_width = $bar_width;
     } // /set_bar_width()
-
-    
 
     /**
      * Set AXIS X VALUES
@@ -559,8 +512,6 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->axis_x_values = $axis_x_values;
     } // /set_axis_x_values()
 
-
-
     /**
      * Set CONFIG
      * @param array $config
@@ -568,8 +519,6 @@ ini_set( 'default_charset', 'UTF-8' );
     public function set_config( $config ){
         $this->config = $config;
     } // /set_config()
-
-
 
     /**
      * Get Config PARAM
@@ -580,14 +529,12 @@ ini_set( 'default_charset', 'UTF-8' );
         return ((isset($this->config[$param]))?$this->config[$param]:$this->default_cfg[$param]);
     }// /get_cfg_param()
 
-
-
     /**
      * Get Str chars of down X axis border
      * 
      * @return string $border
      */
-    private function get_down_border( ){
+    private function get_down_border(){
         $border_cfg = $this->border_chars[$this->get_cfg_param( 'border_chars' )];
 
         $chr_corner = html_entity_decode( $border_cfg['bottom-left'], ENT_NOQUOTES, 'UTF-8');
@@ -598,32 +545,26 @@ ini_set( 'default_charset', 'UTF-8' );
         return $chr_corner.str_pad( '', $this->count_data*$this->bar_width+2, $chr_line); // +2 free space left & right
     } // /get_down_border()
 
-
-
     /**
      * Get Str chars of up X axis border
      * 
      * @return string $border
      */
-    private function get_up_border( ){
+    private function get_up_border(){
         $chr_corner = ' ';
         $chr_line   = '_';
 
         return $chr_corner.str_pad( '', $this->count_data*$this->bar_width+2, $chr_line); // +2 = free space left and right
     } // /get_up_border()
 
-
-
     /**
      * Get Str Axis X values
      * 
      * @return string $str_axis_x_values
      */
-    private function get_axis_x_values( ){
+    private function get_axis_x_values(){
         return $this->justify(implode(' ', $this->axis_x_values), $this->count_data*$this->bar_width + 2 ); // The left and right margin of the graph will be used
     } // /get_axis_x_values()
-
-
 
     /**
      * Get Str Axis X separators
@@ -631,17 +572,15 @@ ini_set( 'default_charset', 'UTF-8' );
      * 
      * @return string $str_axis_x_separators
      */
-    private function get_axis_x_separators( ){
+    private function get_axis_x_separators(){
         $arr_separators = array_fill(0, count($this->axis_x_values), '|');
         return $this->justify(implode(' ', $arr_separators), $this->count_data*$this->bar_width);
     } // /get_axis_x_separators()
 
-
-
     /**
      * Prepare Graph Lines
      */
-    private function prepare_graph_lines( ){
+    private function prepare_graph_lines(){
         $this->arr_prepare_output = [];
 
         for( $i=0; $i<$this->count_data; $i++ ){
@@ -661,8 +600,6 @@ ini_set( 'default_charset', 'UTF-8' );
             $this->arr_prepare_output[] = $StrPrepare;
         }
     } // /prepare_graph_lines()
-
-
 
     /**
      * Get Graph Line
@@ -706,12 +643,10 @@ ini_set( 'default_charset', 'UTF-8' );
         return $Str_line;
     } // /get_graph_line()
 
-
-
     /**
      * Prepare Output in Array
      */
-    public function prepare_array_output( ){
+    public function prepare_array_output(){
         $this->arr_output = [];
 
         $border_cfg = $this->border_chars[$this->get_cfg_param( 'border_chars' )];
@@ -764,7 +699,7 @@ ini_set( 'default_charset', 'UTF-8' );
         $this->prepare_graph_lines();
 
 		$left = $str_padding_left.$str_char_title_y.$str_blank_left_values;
-        
+
         // Padding Top
         for( $i=$this->get_cfg_param( 'padding_top' ); $i> 0; $i-- ){
             $this->arr_output[] = $left.str_pad('', $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
@@ -772,7 +707,6 @@ ini_set( 'default_charset', 'UTF-8' );
         // Graph Title
         $this->arr_output[] = $left.str_pad($this->get_cfg_param( 'title' ), $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
 
-        
         // Down border line
         if( $this->get_cfg_param( 'draw_underlines' ) ){
             $this->arr_output[] = $left.$this->get_up_border().$str_padding_right;
@@ -793,7 +727,7 @@ ini_set( 'default_charset', 'UTF-8' );
             $value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
             $str_char_title_y_loop = (( $this->get_cfg_param( 'show_y_axis_title' ))?$str_pad_axis_y_title[$i].' ':'');
             $chr_underlines = (( $this->get_cfg_param( 'draw_underlines') && (($i+1)%$this->get_cfg_param( 'underlines_every') == 0))?'_':' ');
-            
+
             $this->arr_output[] = $str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left.$chr_underlines.$this->get_graph_line($i).$chr_underlines.$str_padding_right;
         }
 
@@ -810,7 +744,6 @@ ini_set( 'default_charset', 'UTF-8' );
             $this->arr_output[] = $left.str_pad($this->get_cfg_param( 'x_axis_title' ), $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
         }
 
-        
         // Explain Values
         if( $this->get_cfg_param( 'explain_values' ) ){
             $arr_explain = [
@@ -824,7 +757,7 @@ ini_set( 'default_charset', 'UTF-8' );
 				'O ^ Lim '.number_format($this->outl_up_limit, 2, '.', ''),
 				'O v Lim '.number_format($this->outl_down_limit, 2, '.', '')
 			];
-            
+
             if( $this->get_cfg_param( 'explain_values_same_line' ) ){
                 // For compatibility with other functions, we need to cut the line if overrides de width capacity
                 $str_cutted = str_pad(implode( ', ', $arr_explain), $this->count_data * $this->bar_width  + 2, ' ', STR_PAD_RIGHT);
@@ -840,7 +773,6 @@ ini_set( 'default_charset', 'UTF-8' );
             }
         } // /Explain Values
 
-        
         // Padding Bottom
         for( $i=$this->get_cfg_param( 'padding_bottom' ); $i>0; $i-- ){
             $this->arr_output[] = $left.str_pad('', $this->count_data * $this->bar_width + 1 + 2, ' ', STR_PAD_BOTH).$str_padding_right; // +1 = vertical col axis separator, +2 = free space left and right
@@ -848,18 +780,14 @@ ini_set( 'default_charset', 'UTF-8' );
 
     } // /prepare_array_output()
 
-
-
     /**
      * Get count(lines) of graph output
      * 
      * return integer $num_lines
      */
-    public function count_output_lines(  ){
+    public function count_output_lines(){
         return count( $this->arr_output );
     } // /count_output_lines()
-
-
 
     /**
      * Draw Graph
@@ -873,7 +801,7 @@ ini_set( 'default_charset', 'UTF-8' );
      */
     public function draw( $line_id = null, $do_line_break = true, $prepare_array_output = true ){
         if( $prepare_array_output ){
-            $this->prepare_array_output( );
+            $this->prepare_array_output();
         }
 
         if( is_null($line_id) ){
@@ -893,8 +821,6 @@ ini_set( 'default_charset', 'UTF-8' );
             }
         }
     } // /draw()
-
-
 
     /**
      * Justify a string
@@ -919,15 +845,14 @@ ini_set( 'default_charset', 'UTF-8' );
         $c = substr_count($s, ' ');
 
         if($c === 0) return str_pad($s, $num_chars, ' ', STR_PAD_BOTH);
-        
+
         $a = ($num_chars-$l+$c)/$c;
         $h = floor($a);
         $i = ($a-$h)*$c;
         $w = explode(' ', $s, $i+1);
         $w[$i] = str_replace(' ', str_repeat(' ', $h), $w[$i]);
-        
+
         return implode(str_repeat(' ', ceil($a)), $w);
     }
 
 }// /cli_graph_ml
- ?>
