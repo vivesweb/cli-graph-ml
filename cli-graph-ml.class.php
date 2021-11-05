@@ -878,25 +878,23 @@ ini_set('default_charset', 'UTF-8');
      * @return string $justify_string
      */
     private function justify(array $vals, int $num_chars){
-        $s = trim(implode(" ", $vals);
+        $s = trim(implode(" ", $vals));
         $l = strlen($s);
 
         if($l > $num_chars){
             $s = wordwrap($s, $num_chars);
-			$l = $num_chars;
-        }
-
-        $c = substr_count($s, ' ');
-
-        if($c === 0) return str_pad($s, $num_chars, ' ', STR_PAD_BOTH);
-
-        $a = ($num_chars - $l + $c) / $c;
-        $h = floor($a);
-        $i = ($a - $h) * $c;
+			$a = 1;
+			$h = 1;
+			$i = 1;
+        } else {
+			$c = count($vals) - 1;
+			$a = ($num_chars - $l + $c) / $c;
+			$h = floor($a);
+			$i = ($a - $h) * $c;
+		}
 
         $w = explode(' ', $s, $i+1);
         $w[$i] = str_replace(' ', str_repeat(' ', $h), $w[$i]);
         return implode(str_repeat(' ', ceil($a)), $w);
-    }
-
+	}
 }// /cli_graph_ml
