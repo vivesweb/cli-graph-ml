@@ -300,7 +300,7 @@ ini_set('default_charset', 'UTF-8');
 	private $outlier_factor = 2;
 	private $arr_id_data_visible = []; // Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
 
-    public function __construct( $data = null, array $axis_x_values = [], array $config = []) {
+    public function __construct($data = null, array $axis_x_values = [], array $config = []) {
 
 		(!empty($config)) AND $this->set_config($config);
 
@@ -589,7 +589,7 @@ ini_set('default_charset', 'UTF-8');
      * @return string $str_axis_x_values
      */
     private function get_axis_x_values(){
-        return $this->justify(implode(' ', $this->axis_x_values), $this->data_width + 2 ); // The left and right margin of the graph will be used
+        return $this->justify($this->axis_x_values, $this->data_width + 2 ); // The left and right margin of the graph will be used
     } // /get_axis_x_values()
 
     /**
@@ -599,7 +599,7 @@ ini_set('default_charset', 'UTF-8');
      * @return string $str_axis_x_separators
      */
     private function get_axis_x_separators(){
-        return $this->justify(str_repeat("| ", count($this->axis_x_values)), $this->data_width);
+        return $this->justify(array_fill(0, count($this->axis_x_values), "|"), $this->data_width);
     } // /get_axis_x_separators()
 
     /**
@@ -873,18 +873,17 @@ ini_set('default_charset', 'UTF-8');
      * Original:
      * https://www.iteramos.com/pregunta/22339/justificar-cadena-de-algoritmo
      * 
-     * @param string $string
+     * @param array $vals
      * @param integer $num_chars
      * @return string $justify_string
      */
-    private function justify($string, $num_chars){
-        $s = trim($string);
+    private function justify(array $vals, int $num_chars){
+        $s = trim(implode(" ", $vals);
         $l = strlen($s);
 
-        if($l >= $num_chars){
-            $s = explode("\n", wordwrap($s, $num_chars));
-            $s = $s[0];
-            $l = strlen($s);
+        if($l > $num_chars){
+            $s = wordwrap($s, $num_chars);
+			$l = $num_chars;
         }
 
         $c = substr_count($s, ' ');
