@@ -630,16 +630,20 @@ ini_set('default_charset', 'UTF-8');
      * Get Graph Line
      * 
      * @param integer $id_line (begin 0 with top line graph)
+	 * @param integer $low_limit
+	 * @param integer $up_limit
      * @return string str_line
      */
     private function get_graph_line($id_line, $low_limit, $up_limit){
         $str_line = '';
+		$explain = $this->get_cfg_param('explain_values');
 		$bar_color = $this->text_colors[$this->get_cfg_param('bar_color')];
         $chr_underlines = ($this->get_cfg_param('draw_underlines') && (($id_line+1)%$this->get_cfg_param( 'underlines_every') == 0)) ? '_' : ' ';
+		
         foreach($this->data as $key => $data){
             if($this->arr_prepare_output[$key][$this->graph_length-$id_line-1]=='1'){
                 $str_line .= chr(27);
-                if( $this->get_cfg_param('explain_values') && ($data < $low_limit || $data > $up_limit) ){
+                if($explain && ($data < $low_limit || $data > $up_limit) ){
                     $color = $this->text_colors[ 'red' ];
                 } else {
 					$color = $bar_color;
@@ -769,12 +773,14 @@ ini_set('default_charset', 'UTF-8');
 		$this->default_append($this->default_padded($this->get_cfg_param('title')));
 
 		// Down border line
-		if($this->get_cfg_param('draw_underlines')){
+		$draw_underlines = $this->get_cfg_param('draw_underlines');
+		if($draw_underlines){
 			$this->default_append($this->get_up_border());
 		}
 
 		// Axis X Title
-		if($this->get_cfg_param('show_y_axis_title')){
+		$show_y_axis_title = $this->get_cfg_param('show_y_axis_title');
+		if($show_y_axis_title){
 			$str_pad_axis_y_title = str_pad($this->get_cfg_param('y_axis_title'), $this->graph_length, ' ', STR_PAD_BOTH);
 		}
 
@@ -782,6 +788,7 @@ ini_set('default_charset', 'UTF-8');
 		$up_limit = $explain['O ^ Lim'];
 		$low_limit = $explain['O v Lim'];
 
+		$underlines_every = $this->get_cfg_param('underlines_every');
 		$str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
 		$chr_border_left = $this->border_chars[$this->get_cfg_param('border_chars')]['left'];
 		$y_blocks = ($this->max_value - $this->min_value) / $this->graph_length;
@@ -798,8 +805,8 @@ ini_set('default_charset', 'UTF-8');
 				$value_y = (int)($this->max_value - $y_blocks * $i);
 			}
 			$value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
-			$str_char_title_y_loop = ($this->get_cfg_param('show_y_axis_title')) ? $str_pad_axis_y_title[$i].' ' : '';
-			$chr_underlines = ($this->get_cfg_param('draw_underlines') && (($i + 1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
+			$str_char_title_y_loop = ($show_y_axis_title) ? $str_pad_axis_y_title[$i].' ' : '';
+			$chr_underlines = ($draw_underlines && (($i + 1) % $underlines_every == 0)) ? '_' : ' ';
 
 			$this->custom_left_append($str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left, $chr_underlines.$this->get_graph_line($i, $low_limit, $up_limit).$chr_underlines);
 		}
