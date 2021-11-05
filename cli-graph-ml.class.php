@@ -351,7 +351,7 @@ ini_set('default_charset', 'UTF-8');
      * Set DATA
      * @param array $data
      */
-    public function set_data($data){
+    public function set_data(array $data){
         $this->data = $data;
         $this->count_data = count($this->data);
         $this->max_value = max($this->data);
@@ -364,7 +364,7 @@ ini_set('default_charset', 'UTF-8');
      * Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
      * @param array $arr_id_data_visible
      */
-    public function set_arr_id_data_visible( $arr_id_data_visible ){
+    public function set_arr_id_data_visible(bool $arr_id_data_visible){ # UNUSED
         $this->arr_id_data_visible = $arr_id_data_visible;
     }// /set_arr_id_data_visible()
 
@@ -372,7 +372,7 @@ ini_set('default_charset', 'UTF-8');
      * Set EXPLAIN VALUES
      * @param boolean $explain_values
      */
-    public function set_explain_values( $explain_values = true ){
+    public function set_explain_values(bool $explain_values = true){
         $this->config['explain_values'] = $explain_values;
     }// /set_explain_values()
 
@@ -380,18 +380,22 @@ ini_set('default_charset', 'UTF-8');
      * Set BAR COLOR
      * @param string $bar_color
      */
-    public function set_bar_color( $bar_color = 'lightwhite' ){
-        $this->config['bar_color'] = $bar_color;
+    public function set_bar_color(string $bar_color = 'lightwhite'){
+		if(array_key_exists($bar_color, $this->text_colors)){
+			$this->config['bar_color'] = $bar_color;
+		} else {
+			throw new Exception('Color not defined');
+		}
     }// /set_bar_color()
 
     /**
      * Set EXPLAIN VALUES SAME LINE
      * @param boolean $explain_values_same_line
      */
-    public function set_explain_values_same_line( $explain_values_same_line = true ){
+    public function set_explain_values_same_line(bool $explain_values_same_line = true){
         $this->config['explain_values_same_line'] = $explain_values_same_line;
-        if( $this->config['explain_values_same_line'] ){
-            $this->set_explain_values(  ); // Default true
+        if($this->config['explain_values_same_line']){
+            $this->set_explain_values(); // Default true
         }
     }// /set_explain_values_same_line()
 
@@ -399,7 +403,7 @@ ini_set('default_charset', 'UTF-8');
      * Set Outlier Factor
      * @param double $outlier_factor
      */
-    public function set_outlier_factor( $outlier_factor = 2 ){
+    public function set_outlier_factor(int $outlier_factor = 2){
         $this->outlier_factor = $outlier_factor;
     }// /set_outlier_factor()
 
@@ -407,7 +411,7 @@ ini_set('default_charset', 'UTF-8');
      * Set TITLE
      * @param string $title
      */
-    public function set_title( $title = '' ){
+    public function set_title(string $title = ''){
         $this->config['title'] = $title;
     }// /set_title()
 
@@ -415,7 +419,7 @@ ini_set('default_charset', 'UTF-8');
      * Set draw underlines every x rows
      * @param integer $underlines_every
      */
-    public function set_underlines_every( $underlines_every = 1 ){
+    public function set_underlines_every(int $underlines_every = 1){
         $this->config['underlines_every'] = $underlines_every;
     }// /set_underlines_every()
 
@@ -423,7 +427,7 @@ ini_set('default_charset', 'UTF-8');
      * Set X AXIS TITLE
      * @param string $x_axis_title
      */
-    public function set_x_axis_title( $x_axis_title = '' ){
+    public function set_x_axis_title(string $x_axis_title = ''){
         $this->config['x_axis_title'] = $x_axis_title;
     }// /set_x_axis_title()
 
@@ -431,7 +435,7 @@ ini_set('default_charset', 'UTF-8');
      * Set Y AXIS TITLE
      * @param string $y_axis_title
      */
-    public function set_y_axis_title( $y_axis_title = '' ){
+    public function set_y_axis_title(string $y_axis_title = ''){
         $this->config['y_axis_title'] = $y_axis_title;
     }// /set_y_axis_title()
 
@@ -439,7 +443,7 @@ ini_set('default_charset', 'UTF-8');
      * Set SHOW X AXIS TITLE
      * @param boolean $show_x_axis_title
      */
-    public function set_show_x_axis_title( $show_x_axis_title = true ){
+    public function set_show_x_axis_title(bool $show_x_axis_title = true){
         $this->config['show_x_axis_title'] = $show_x_axis_title;
     }// /set_show_x_axis_title()
 
@@ -447,7 +451,7 @@ ini_set('default_charset', 'UTF-8');
      * Set SHOW Y AXIS TITLE
      * @param boolean $show_y_axis_title
      */
-    public function set_show_y_axis_title( $show_y_axis_title = true ){
+    public function set_show_y_axis_title(bool $show_y_axis_title = true){
         $this->config['show_y_axis_title'] = $show_y_axis_title;
     }// /set_show_y_axis_title()
 
@@ -455,27 +459,27 @@ ini_set('default_charset', 'UTF-8');
      * Set SHOW X,Y AXIS TITLE
      * @param boolean $show_axis_titles
      */
-    public function set_show_axis_titles( $show_axis_titles = true ){
-        $this->set_show_x_axis_title( $show_axis_titles );
-        $this->set_show_y_axis_title( $show_axis_titles );
+    public function set_show_axis_titles(bool $show_axis_titles = true){
+        $this->set_show_x_axis_title($show_axis_titles);
+        $this->set_show_y_axis_title($show_axis_titles);
     }// /set_show_axis_titles()
 
     /**
      * Set PADDING
      * @param integer $padding
      */
-    public function set_padding( $padding = 1 ){
-        $this->set_left_padding( $padding );
-        $this->set_right_padding( $padding );
-        $this->set_top_padding( $padding );
-        $this->set_bottom_padding( $padding );
+    public function set_padding(int $padding = 1){
+        $this->set_left_padding($padding);
+        $this->set_right_padding($padding);
+        $this->set_top_padding($padding);
+        $this->set_bottom_padding($padding);
     }// /set_padding()
 
     /**
      * Set SET LEFT PADDING
      * @param integer $left_padding
      */
-    public function set_left_padding( $left_padding = 1 ){
+    public function set_left_padding(int $left_padding = 1){
         $this->config['left_padding'] = $left_padding;
     }// /set_left_padding()
 
@@ -483,7 +487,7 @@ ini_set('default_charset', 'UTF-8');
      * Set SET RIGHT PADDING
      * @param integer $left_padding
      */
-    public function set_right_padding( $right_padding = 1 ){
+    public function set_right_padding(int $right_padding = 1){
         $this->config['right_padding'] = $right_padding;
     }// /set_right_padding()
 
@@ -491,7 +495,7 @@ ini_set('default_charset', 'UTF-8');
      * Set SET TOP PADDING
      * @param integer $top_padding
      */
-    public function set_top_padding( $top_padding = 1 ){
+    public function set_top_padding(int $top_padding = 1){
         $this->config['top_padding'] = $top_padding;
     }// /set_top_padding()
 
@@ -499,7 +503,7 @@ ini_set('default_charset', 'UTF-8');
      * Set SET BOTTOM PADDING
      * @param integer $bottom_padding
      */
-    public function set_bottom_padding( $bottom_padding = 1 ){
+    public function set_bottom_padding(int $bottom_padding = 1){
         $this->config['bottom_padding'] = $bottom_padding;
     }// /set_bottom_padding()
 
@@ -507,7 +511,7 @@ ini_set('default_charset', 'UTF-8');
      * Set Graph Length
      * @param integer $length
      */
-    public function set_graph_length( $length = 10 ){
+    public function set_graph_length(int $length = 10){
         $this->graph_length = $length;
     }// /set_graph_length()
 
@@ -515,7 +519,7 @@ ini_set('default_charset', 'UTF-8');
      * Set DRAW UNDERLINES
      * @param boolean $draw_underlines
      */
-    public function set_draw_underlines( $draw_underlines = true ){
+    public function set_draw_underlines(bool $draw_underlines = true){
         $this->config['draw_underlines'] = $draw_underlines;
     }// /set_draw_underlines()
 
@@ -523,7 +527,7 @@ ini_set('default_charset', 'UTF-8');
      * Set BAR WIDTH
      * @param integer $bar_width
      */
-    public function set_bar_width( $bar_width = 1 ){
+    public function set_bar_width(int $bar_width = 1 ){
         $this->bar_width = $bar_width;
 		$this->data_width = $this->count_data * $bar_width;
     } // /set_bar_width()
@@ -549,7 +553,7 @@ ini_set('default_charset', 'UTF-8');
      * @param string $param
      * @return string $param
      */
-    private function get_cfg_param( $param ){
+    private function get_cfg_param(string $param){
         return (isset($this->config[$param])) ? $this->config[$param] : $this->default_cfg[$param];
     }// /get_cfg_param()
 
