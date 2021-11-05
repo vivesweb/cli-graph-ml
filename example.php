@@ -41,7 +41,7 @@
     ]; // /$default_cfg
  */
 
- $config = null;
+ $config = [];
  
 
 $arr_val_example_1 = [  1,2,5,6,7,9,12,15,18,19,38 ];
@@ -127,8 +127,3 @@ for( $i = 0; $i< $count_output_lines; $i++ ){
 
     echo PHP_EOL; // for get new line
 }
-
-unset( $graph );
-unset( $i );
-unset( $arr_val_example );
-unset( $bar_graph );?>

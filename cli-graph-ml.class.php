@@ -283,13 +283,14 @@ ini_set('default_charset', 'UTF-8');
     ]; // /$default_cfg
 
 	private $data = [];
+	private $config = [];
 	private $count_data;
 	private $data_width;
 	private $bar_width = 1;
 	private $padding_left;
 	private $padding_right;
 	private $arr_output = [];
-	private $axis_x_values;
+	private $axis_x_values = [];
 
 	private $graph_length;
 	private $max_value;
@@ -299,15 +300,15 @@ ini_set('default_charset', 'UTF-8');
 	private $outlier_factor = 2;
 	private $arr_id_data_visible = []; // Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
 
-    public function __construct( $data = null, $axis_x_values = null, $config = null) {
+    public function __construct( $data = null, array $axis_x_values = [], array $config = []) {
 
-		(!is_null($config)) AND $this->set_config($config);
+		(!empty($config)) AND $this->set_config($config);
 
 		$this->graph_length = $this->get_cfg_param('graph_length');
 		$this->bar_width = $this->get_cfg_param('bar_width');
 
 		(!is_null($data)) AND $this->set_data($data);
-		(!is_null($axis_x_values)) AND $this->set_axis_x_values($axis_x_values);
+		(!empty($axis_x_values)) AND $this->set_axis_x_values($axis_x_values);
 		
 		if (PHP_OS_FAMILY === "Windows") { # PHP 7.2+
 			$this->text_colors = $this->text_colors_win32;
@@ -531,7 +532,7 @@ ini_set('default_charset', 'UTF-8');
      * Set AXIS X VALUES
      * @param array $axis_x_values
      */
-    public function set_axis_x_values( $axis_x_values ){
+    public function set_axis_x_values(array $axis_x_values){
         $this->axis_x_values = $axis_x_values;
     } // /set_axis_x_values()
 
@@ -539,7 +540,7 @@ ini_set('default_charset', 'UTF-8');
      * Set CONFIG
      * @param array $config
      */
-    public function set_config( $config ){
+    public function set_config(array $config){
         $this->config = $config;
     } // /set_config()
 
@@ -575,7 +576,7 @@ ini_set('default_charset', 'UTF-8');
         $chr_corner = ' ';
         $chr_line   = '_';
 
-        return $chr_corner.str_pad( '', $this->data_width + 2, $chr_line); // +2 = free space left and right
+        return $chr_corner.str_pad('', $this->data_width + 2, $chr_line); // +2 = free space left and right
     } // /get_up_border()
 
     /**
@@ -733,7 +734,7 @@ ini_set('default_charset', 'UTF-8');
 		if($this->get_cfg_param('explain_values_same_line')){
 			// For compatibility with other functions, we need to cut the line if overrides de width capacity
 			$str_cutted = str_pad(implode( ', ', $arr_explain), $this->data_width + 2, ' ', STR_PAD_RIGHT);
-			if( strlen($str_cutted) > $this->data_width + 2){
+			if(strlen($str_cutted) > $this->data_width + 2){
 				$str_cutted = substr( $str_cutted, 0, $this->data_width + 1);
 				$str_cutted .= chr(27).'[0;31m'.'>'.chr(27).'[0m'.' '; // Indicate that the values continue
 			}
@@ -887,12 +888,12 @@ ini_set('default_charset', 'UTF-8');
 
         if($c === 0) return str_pad($s, $num_chars, ' ', STR_PAD_BOTH);
 
-        $a = ($num_chars-$l+$c)/$c;
+        $a = ($num_chars - $l + $c) / $c;
         $h = floor($a);
-        $i = ($a-$h)*$c;
+        $i = ($a - $h) * $c;
+
         $w = explode(' ', $s, $i+1);
         $w[$i] = str_replace(' ', str_repeat(' ', $h), $w[$i]);
-
         return implode(str_repeat(' ', ceil($a)), $w);
     }
 
