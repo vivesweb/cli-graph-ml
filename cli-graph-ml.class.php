@@ -584,31 +584,12 @@ ini_set('default_charset', 'UTF-8');
     } // /get_up_border()
 
     /**
-     * Get Str Axis X values
-     * 
-     * @return string $str_axis_x_values
-     */
-    private function get_axis_x_values(){
-        return $this->justify($this->axis_x_values, $this->data_width + 2); // The left and right margin of the graph will be used
-    } // /get_axis_x_values()
-
-    /**
-     * Get Str Axis X separators
-     * Used after draw down line of chart
-     * 
-     * @return string $str_axis_x_separators
-     */
-    private function get_axis_x_separators(){
-        return $this->justify(array_fill(0, count($this->axis_x_values), "|"), $this->data_width);
-    } // /get_axis_x_separators()
-
-    /**
      * Prepare Graph Lines
      */
     private function prepare_graph_lines(){
         $this->arr_prepare_output = [];
 
-        for( $i=0; $i < $this->count_data; $i++ ){
+        for($i = 0; $i < $this->count_data; $i++){
             $full = (int) ($this->data[$i] * $this->graph_length / $this->max_value);
             $empty = $this->graph_length - $full;
 
@@ -813,9 +794,9 @@ ini_set('default_charset', 'UTF-8');
 		$this->default_append($this->get_down_border());
 
 		// Axis X Separators |
-		$this->default_append('  '.$this->get_axis_x_separators().' ');
+		$this->default_append('  '.$this->justify(array_fill(0, count($this->axis_x_values), "|"), $this->data_width).' ');
 		// Axis X Values
-		$this->default_append(' '.$this->get_axis_x_values());
+		$this->default_append(' '.$this->justify($this->axis_x_values, $this->data_width + 2));
 
 		// Axis X Title
 		if($this->get_cfg_param('show_x_axis_title')){
