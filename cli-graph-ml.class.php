@@ -589,7 +589,7 @@ ini_set('default_charset', 'UTF-8');
      * @return string $str_axis_x_values
      */
     private function get_axis_x_values(){
-        return $this->justify($this->axis_x_values, $this->data_width + 2 ); // The left and right margin of the graph will be used
+        return $this->justify($this->axis_x_values, $this->data_width + 2); // The left and right margin of the graph will be used
     } // /get_axis_x_values()
 
     /**
@@ -633,39 +633,40 @@ ini_set('default_charset', 'UTF-8');
      * @return string str_line
      */
     private function get_graph_line($id_line, $low_limit, $up_limit){
-        $Str_line = '';
-        $chr_underlines = (( $this->get_cfg_param( 'draw_underlines') && (($id_line+1)%$this->get_cfg_param( 'underlines_every') == 0))?'_':' ');
-        foreach($this->data as $key=>$data){
+        $str_line = '';
+		$bar_color = $this->text_colors[$this->get_cfg_param('bar_color')];
+        $chr_underlines = ($this->get_cfg_param('draw_underlines') && (($id_line+1)%$this->get_cfg_param( 'underlines_every') == 0)) ? '_' : ' ';
+        foreach($this->data as $key => $data){
             if($this->arr_prepare_output[$key][$this->graph_length-$id_line-1]=='1'){
-                $Str_line .= chr(27);
-                $color = $this->text_colors[ $this->get_cfg_param( 'bar_color') ];
-                if( $this->get_cfg_param( 'explain_values' ) && ($data < $low_limit || $data > $up_limit) ){
+                $str_line .= chr(27);
+                if( $this->get_cfg_param('explain_values') && ($data < $low_limit || $data > $up_limit) ){
                     $color = $this->text_colors[ 'red' ];
-                }
-                $Str_line .= $color;
-                for($i=0;$i<$this->bar_width-1;$i++){
-                    $Str_line .= $this->Full_block;
+                } else {
+					$color = $bar_color;
+				}
+                $str_line .= $color;
+                for($i = 0; $i < $this->bar_width-1; $i++){
+                    $str_line .= $this->Full_block;
                 }
                 //Quadrant_lower_left
-                $Str_line .= $this->Left_half_block;
-
-                $Str_line .= chr(27).'[0m';
+                $str_line .= $this->Left_half_block;
+                $str_line .= chr(27).'[0m';
             } else {
                 if($this->graph_length-1 == $id_line && in_array($key, $this->arr_id_data_visible)){
                     // We need to draw someting to show the value exists, unless is 0
-                    for($i=0;$i<$this->bar_width-1;$i++){
-                        $Str_line .= $this->Lower_half_block;
+                    for($i = 0; $i < $this->bar_width-1; $i++){
+                        $str_line .= $this->Lower_half_block;
                     }
-                    $Str_line .= $this->Lower_half_block; //$this->Quadrant_lower_left; // dont work ????
+                    $str_line .= $this->Lower_half_block; //$this->Quadrant_lower_left; // dont work ????
                 } else {
-                    for($i=0;$i<$this->bar_width;$i++){
-                        $Str_line .= $chr_underlines; // Fill with graph char code of ' '
+                    for($i = 0; $i < $this->bar_width; $i++){
+                        $str_line .= $chr_underlines; // Fill with graph char code of ' '
                     }
                 }
             }
         }
 
-        return $Str_line;
+        return $str_line;
     } // /get_graph_line()
 
 	private function prepare_default_append(){
