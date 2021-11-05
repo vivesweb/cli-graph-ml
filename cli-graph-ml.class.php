@@ -595,8 +595,7 @@ ini_set('default_charset', 'UTF-8');
      * @return string $str_axis_x_separators
      */
     private function get_axis_x_separators(){
-        $arr_separators = array_fill(0, count($this->axis_x_values), '|');
-        return $this->justify(implode(' ', $arr_separators), $this->data_width);
+        return $this->justify(str_repeat("| ", count($this->axis_x_values)), $this->data_width);
     } // /get_axis_x_separators()
 
     /**
