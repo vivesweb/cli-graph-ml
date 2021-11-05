@@ -638,17 +638,16 @@ ini_set('default_charset', 'UTF-8');
         $str_line = '';
 		$explain = $this->get_cfg_param('explain_values');
 		$bar_color = $this->text_colors[$this->get_cfg_param('bar_color')];
-        $chr_underlines = ($this->get_cfg_param('draw_underlines') && (($id_line+1)%$this->get_cfg_param( 'underlines_every') == 0)) ? '_' : ' ';
+        $chr_underlines = ($this->get_cfg_param('draw_underlines') && (($id_line+1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
 		
         foreach($this->data as $key => $data){
             if($this->arr_prepare_output[$key][$this->graph_length-$id_line-1]=='1'){
                 $str_line .= chr(27);
-                if($explain && ($data < $low_limit || $data > $up_limit) ){
-                    $color = $this->text_colors[ 'red' ];
+                if($explain && ($data < $low_limit || $data > $up_limit)){
+                    $str_line .= $this->text_colors['red'];
                 } else {
-					$color = $bar_color;
+					$str_line .= $bar_color;
 				}
-                $str_line .= $color;
                 for($i = 0; $i < $this->bar_width-1; $i++){
                     $str_line .= $this->Full_block;
                 }
@@ -741,9 +740,9 @@ ini_set('default_charset', 'UTF-8');
 
 		if($this->get_cfg_param('explain_values_same_line')){
 			// For compatibility with other functions, we need to cut the line if overrides de width capacity
-			$str_cutted = str_pad(implode( ', ', $arr_explain), $this->data_width + 2, ' ', STR_PAD_RIGHT);
+			$str_cutted = str_pad(implode(', ', $arr_explain), $this->data_width + 2, ' ', STR_PAD_RIGHT);
 			if(strlen($str_cutted) > $this->data_width + 2){
-				$str_cutted = substr( $str_cutted, 0, $this->data_width + 1);
+				$str_cutted = substr($str_cutted, 0, $this->data_width + 1);
 				$str_cutted .= chr(27).'[0;31m'.'>'.chr(27).'[0m'.' '; // Indicate that the values continue
 			}
 			$this->default_append(' '.$str_cutted);
@@ -800,14 +799,13 @@ ini_set('default_charset', 'UTF-8');
 
 		for($i = 0; $i < $this->graph_length; $i++){
 			if($this->max_value - $this->min_value < 10){
-				$value_y = number_format($this->max_value - $y_blocks * $i, 1, '.', '' );
+				$value_y = number_format($this->max_value - $y_blocks * $i, 1, '.', '');
 			} else {
 				$value_y = (int)($this->max_value - $y_blocks * $i);
 			}
 			$value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
 			$str_char_title_y_loop = ($show_y_axis_title) ? $str_pad_axis_y_title[$i].' ' : '';
 			$chr_underlines = ($draw_underlines && (($i + 1) % $underlines_every == 0)) ? '_' : ' ';
-
 			$this->custom_left_append($str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left, $chr_underlines.$this->get_graph_line($i, $low_limit, $up_limit).$chr_underlines);
 		}
 
@@ -858,12 +856,12 @@ ini_set('default_charset', 'UTF-8');
      * @param boolean $do_line_break
      * @param boolean $prepare_array_output
      */
-    public function draw( $line_id = null, $do_line_break = true, $prepare_array_output = true ){
+    public function draw($line_id = null, $do_line_break = true, $prepare_array_output = true){
         if($prepare_array_output){
             $this->prepare_array_output();
         }
 
-        if( is_null($line_id) ){
+        if(is_null($line_id)){
             foreach($this->arr_output as $output_line){
                 echo $output_line;
                 if ($do_line_break) echo PHP_EOL;
