@@ -632,14 +632,14 @@ ini_set('default_charset', 'UTF-8');
      * @param integer $id_line (begin 0 with top line graph)
      * @return string str_line
      */
-    private function get_graph_line($id_line, $down_limit, $up_limit){
+    private function get_graph_line($id_line, $low_limit, $up_limit){
         $Str_line = '';
         $chr_underlines = (( $this->get_cfg_param( 'draw_underlines') && (($id_line+1)%$this->get_cfg_param( 'underlines_every') == 0))?'_':' ');
         foreach($this->data as $key=>$data){
             if($this->arr_prepare_output[$key][$this->graph_length-$id_line-1]=='1'){
                 $Str_line .= chr(27);
                 $color = $this->text_colors[ $this->get_cfg_param( 'bar_color') ];
-                if( $this->get_cfg_param( 'explain_values' ) && ($data < $down_limit || $data > $up_limit) ){
+                if( $this->get_cfg_param( 'explain_values' ) && ($data < $low_limit || $data > $up_limit) ){
                     $color = $this->text_colors[ 'red' ];
                 }
                 $Str_line .= $color;
@@ -779,7 +779,7 @@ ini_set('default_charset', 'UTF-8');
 
 		// Get array of string graph
 		$up_limit = $explain['O ^ Lim'];
-		$down_limit = $explain['O v Lim'];
+		$low_limit = $explain['O v Lim'];
 
 		$str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
 		$chr_border_left = $this->border_chars[$this->get_cfg_param('border_chars')]['left'];
@@ -800,7 +800,7 @@ ini_set('default_charset', 'UTF-8');
 			$str_char_title_y_loop = ($this->get_cfg_param('show_y_axis_title')) ? $str_pad_axis_y_title[$i].' ' : '';
 			$chr_underlines = ($this->get_cfg_param('draw_underlines') && (($i + 1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
 
-			$this->custom_left_append($str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left, $chr_underlines.$this->get_graph_line($i, $down_limit, $up_limit).$chr_underlines);
+			$this->custom_left_append($str_padding_left.$str_char_title_y_loop.$value_y.$chr_border_left, $chr_underlines.$this->get_graph_line($i, $low_limit, $up_limit).$chr_underlines);
 		}
 
 		// Down border line
