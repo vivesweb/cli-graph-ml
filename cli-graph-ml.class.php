@@ -228,7 +228,28 @@ ini_set('default_charset', 'UTF-8');
         'cyan'          => '[0;36m',
         'white'         => '[0;37m',
         'orange'        => '[38;5;214m', // if supported by the terminal
-        'reset'         => '[0m',
+        'reset'         => '[0m'
+    ]; // /$text_colors
+
+    private $text_colors_win32 = [
+        'lightblue'     => '[?1;34m',
+        'lightred'      => '[?1;31m',
+        'lightgreen'    => '[?1;32m',
+        'lightyellow'   => '[?1;33m',
+        'lightblack'    => '[?1;30m',
+        'lightmagenta'  => '[?1;35m',
+        'lightcyan'     => '[?1;36m',
+        'lightwhite'    => '[?1;37m',
+        'blue'          => '[0;34m',
+        'red'           => '[0;31m',
+        'green'         => '[0;32m',
+        'yellow'        => '[0;33m',
+        'black'         => '[0;30m',
+        'magenta'       => '[0;35m',
+        'cyan'          => '[0;36m',
+        'white'         => '[0;37m',
+        'orange'        => '[38;5;214m', // if supported by the terminal
+        'reset'         => '[0m'
     ]; // /$text_colors
 
     /**
@@ -282,43 +303,47 @@ ini_set('default_charset', 'UTF-8');
 
 		(!is_null($config)) AND $this->set_config($config);
 
-        $this->graph_length = $this->get_cfg_param('graph_length');
-        $this->bar_width = $this->get_cfg_param('bar_width');
+		$this->graph_length = $this->get_cfg_param('graph_length');
+		$this->bar_width = $this->get_cfg_param('bar_width');
 
 		(!is_null($data)) AND $this->set_data($data);
 		(!is_null($axis_x_values)) AND $this->set_axis_x_values($axis_x_values);
+		
+		if (PHP_OS_FAMILY === "Windows") { # PHP 7.2+
+			$this->text_colors = $this->text_colors_win32;
+		}
 
-        $this->Upper_half_block                                     = html_entity_decode('▀', ENT_NOQUOTES, 'UTF-8');
-        $this->Lower_one_eighth_block                               = html_entity_decode('▁', ENT_NOQUOTES, 'UTF-8');
-        $this->Lower_one_quarter_block                              = html_entity_decode('▂', ENT_NOQUOTES, 'UTF-8');
-        $this->Lower_three_eighths_block                            = html_entity_decode('▃', ENT_NOQUOTES, 'UTF-8');
-        $this->Lower_half_block                                     = html_entity_decode('▄', ENT_NOQUOTES, 'UTF-8');
-        $this->Lower_five_eighths_block                             = html_entity_decode('▅', ENT_NOQUOTES, 'UTF-8');
-        $this->Lower_three_quarters_block                           = html_entity_decode('▆', ENT_NOQUOTES, 'UTF-8');
-        $this->Lower_seven_eighths_block                            = html_entity_decode('▇', ENT_NOQUOTES, 'UTF-8');
-        $this->Full_block                                           = html_entity_decode('█', ENT_NOQUOTES, 'UTF-8');
-        $this->Left_seven_eighths_block                             = html_entity_decode('▉', ENT_NOQUOTES, 'UTF-8');
-        $this->Left_three_quarters_block                            = html_entity_decode('▊', ENT_NOQUOTES, 'UTF-8');
-        $this->Left_five_eighths_block                              = html_entity_decode('▋', ENT_NOQUOTES, 'UTF-8');
-        $this->Left_half_block                                      = html_entity_decode('▌', ENT_NOQUOTES, 'UTF-8');
-        $this->Left_three_eighths_block                             = html_entity_decode('▍', ENT_NOQUOTES, 'UTF-8');
-        $this->Left_one_quarter_block                               = html_entity_decode('▎', ENT_NOQUOTES, 'UTF-8');
-        $this->Left_one_eighth_block                                = html_entity_decode('▏', ENT_NOQUOTES, 'UTF-8');
-        $this->Right_half_block                                     = html_entity_decode('▐', ENT_NOQUOTES, 'UTF-8');
-        $this->Light_shade                                          = html_entity_decode('░', ENT_NOQUOTES, 'UTF-8');
-        $this->Medium_shade                                         = html_entity_decode('▒', ENT_NOQUOTES, 'UTF-8');
-        $this->Upper_one_eighth_block                               = html_entity_decode('▔', ENT_NOQUOTES, 'UTF-8');
-        $this->Right_one_eighth_block                               = html_entity_decode('▕', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_lower_left                                  = html_entity_decode('▖', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_lower_right                                 = html_entity_decode('▗', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_left                                  = html_entity_decode('▘', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_left_and_lower_left_and_lower_right   = html_entity_decode('▙', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_left_and_lower_right                  = html_entity_decode('▚', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_left_and_upper_right_and_lower_left   = html_entity_decode('▛', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_left_and_upper_right_and_lower_right  = html_entity_decode('▜', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_right                                 = html_entity_decode('▝', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_right_and_lower_left                  = html_entity_decode('▞', ENT_NOQUOTES, 'UTF-8');
-        $this->Quadrant_upper_right_and_lower_left_and_lower_right  = html_entity_decode('▟', ENT_NOQUOTES, 'UTF-8');
+		$this->Upper_half_block                                     = html_entity_decode('▀', ENT_NOQUOTES, 'UTF-8');
+		$this->Lower_one_eighth_block                               = html_entity_decode('▁', ENT_NOQUOTES, 'UTF-8');
+		$this->Lower_one_quarter_block                              = html_entity_decode('▂', ENT_NOQUOTES, 'UTF-8');
+		$this->Lower_three_eighths_block                            = html_entity_decode('▃', ENT_NOQUOTES, 'UTF-8');
+		$this->Lower_half_block                                     = html_entity_decode('▄', ENT_NOQUOTES, 'UTF-8');
+		$this->Lower_five_eighths_block                             = html_entity_decode('▅', ENT_NOQUOTES, 'UTF-8');
+		$this->Lower_three_quarters_block                           = html_entity_decode('▆', ENT_NOQUOTES, 'UTF-8');
+		$this->Lower_seven_eighths_block                            = html_entity_decode('▇', ENT_NOQUOTES, 'UTF-8');
+		$this->Full_block                                           = html_entity_decode('█', ENT_NOQUOTES, 'UTF-8');
+		$this->Left_seven_eighths_block                             = html_entity_decode('▉', ENT_NOQUOTES, 'UTF-8');
+		$this->Left_three_quarters_block                            = html_entity_decode('▊', ENT_NOQUOTES, 'UTF-8');
+		$this->Left_five_eighths_block                              = html_entity_decode('▋', ENT_NOQUOTES, 'UTF-8');
+		$this->Left_half_block                                      = html_entity_decode('▌', ENT_NOQUOTES, 'UTF-8');
+		$this->Left_three_eighths_block                             = html_entity_decode('▍', ENT_NOQUOTES, 'UTF-8');
+		$this->Left_one_quarter_block                               = html_entity_decode('▎', ENT_NOQUOTES, 'UTF-8');
+		$this->Left_one_eighth_block                                = html_entity_decode('▏', ENT_NOQUOTES, 'UTF-8');
+		$this->Right_half_block                                     = html_entity_decode('▐', ENT_NOQUOTES, 'UTF-8');
+		$this->Light_shade                                          = html_entity_decode('░', ENT_NOQUOTES, 'UTF-8');
+		$this->Medium_shade                                         = html_entity_decode('▒', ENT_NOQUOTES, 'UTF-8');
+		$this->Upper_one_eighth_block                               = html_entity_decode('▔', ENT_NOQUOTES, 'UTF-8');
+		$this->Right_one_eighth_block                               = html_entity_decode('▕', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_lower_left                                  = html_entity_decode('▖', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_lower_right                                 = html_entity_decode('▗', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_left                                  = html_entity_decode('▘', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_left_and_lower_left_and_lower_right   = html_entity_decode('▙', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_left_and_lower_right                  = html_entity_decode('▚', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_left_and_upper_right_and_lower_left   = html_entity_decode('▛', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_left_and_upper_right_and_lower_right  = html_entity_decode('▜', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_right                                 = html_entity_decode('▝', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_right_and_lower_left                  = html_entity_decode('▞', ENT_NOQUOTES, 'UTF-8');
+		$this->Quadrant_upper_right_and_lower_left_and_lower_right  = html_entity_decode('▟', ENT_NOQUOTES, 'UTF-8');
 	} // / __construct
 
     /**
