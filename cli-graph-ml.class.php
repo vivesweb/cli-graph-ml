@@ -869,32 +869,17 @@ ini_set('default_charset', 'UTF-8');
 
     /**
      * Justify a string
-     * 
-     * Original:
-     * https://www.iteramos.com/pregunta/22339/justificar-cadena-de-algoritmo
-     * 
-     * @param array $vals
-     * @param integer $num_chars
-     * @return string $justify_string
      */
-    private function justify(array $vals, int $num_chars){
+    private function justify(array $vals, int $limit){
         $s = trim(implode(" ", $vals));
         $l = strlen($s);
 
-        if($l > $num_chars){
-            $s = wordwrap($s, $num_chars);
-			$a = 1;
-			$h = 1;
-			$i = 1;
+        if($l >= $limit){
+            return wordwrap($s, $limit);
         } else {
 			$c = count($vals) - 1;
-			$a = ($num_chars - $l + $c) / $c;
-			$h = floor($a);
-			$i = ($a - $h) * $c;
+			$h = ceil(($limit - $l + $c) / $c);
+			return str_replace(' ', str_repeat(' ', $h), $s);
 		}
-
-        $w = explode(' ', $s, $i+1);
-        $w[$i] = str_replace(' ', str_repeat(' ', $h), $w[$i]);
-        return implode(str_repeat(' ', ceil($a)), $w);
 	}
 }// /cli_graph_ml
