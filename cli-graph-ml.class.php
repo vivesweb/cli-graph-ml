@@ -527,7 +527,7 @@ ini_set('default_charset', 'UTF-8');
      * Set BAR WIDTH
      * @param integer $bar_width
      */
-    public function set_bar_width(int $bar_width = 1 ){
+    public function set_bar_width(int $bar_width = 1){
         $this->bar_width = $bar_width;
 		$this->data_width = $this->count_data * $bar_width;
     } // /set_bar_width()
@@ -579,8 +579,7 @@ ini_set('default_charset', 'UTF-8');
     private function get_up_border(){
         $chr_corner = ' ';
         $chr_line   = '_';
-
-        return $chr_corner.str_pad('', $this->data_width + 2, $chr_line); // +2 = free space left and right
+        return $chr_corner.str_repeat($chr_line, $this->data_width + 2); // +2 = free space left and right
     } // /get_up_border()
 
     /**
@@ -590,7 +589,7 @@ ini_set('default_charset', 'UTF-8');
         $this->arr_prepare_output = [];
 
         for($i = 0; $i < $this->count_data; $i++){
-            $full = (int) ($this->data[$i] * $this->graph_length / $this->max_value);
+            $full = (int)($this->data[$i] * $this->graph_length / $this->max_value);
             $empty = $this->graph_length - $full;
 
             $StrPrepare = '';
