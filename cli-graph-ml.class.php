@@ -88,8 +88,8 @@ ini_set('default_charset', 'UTF-8');
  * U+259F	▟	Quadrant upper right and lower left and lower right
  * */
 
- class cli_graph_ml
- {
+class cli_graph_ml
+{
 	private $Upper_half_block;
 	private $Lower_one_eighth_block;
 	private $Lower_one_quarter_block;
@@ -122,159 +122,159 @@ ini_set('default_charset', 'UTF-8');
 	private $Quadrant_upper_right_and_lower_left;
 	private $Quadrant_upper_right_and_lower_left_and_lower_right;
 
-    /**
-     * Border Characters
-     * see: https://unicode-table.com/en/blocks/box-drawing/
-     * @var    array
-     * @access private
-     **/
-    private $border_chars = [
-        'simple' => [
-            'top'          => '-',
-            'top-mid'      => '+',
-            'top-left'     => '+',
-            'top-right'    => '+',
-            'bottom'       => '-',
-            'bottom-mid'   => '+',
-            'bottom-left'  => '+',
-            'bottom-right' => '+',
-            'left'         => '|',
-            'left-mid'     => '+',
-            'mid'          => '-',
-            'mid-mid'      => '+',
-            'right'        => '|',
-            'right-mid'    => '+',
-            'middle'       => '|'
-            ],
-        'single' => [
-            'right-mid'    => '+',
-            'top'          => '─',
-            'top-mid'      => '┬',
-            'top-left'     => '┌',
-            'top-right'    => '┐',
-            'bottom'       => '─',
-            'bottom-mid'   => '┴',
-            'bottom-left'  => '└',
-            'bottom-right' => '┘',
-            'left'         => '│',
-            'left-mid'     => '├',
-            'mid'          => '─',
-            'mid-mid'      => '┼',
-            'right'        => '│',
-            'right-mid'    => '┤',
-            'middle'       => '│'
-            ],
-        'double' => [
-            'top'          => '═',
-            'top-mid'      => '╦',
-            'top-left'     => '╔',
-            'top-right'    => '╗',
-            'bottom'       => '═',
-            'bottom-mid'   => '╩',
-            'bottom-left'  => '╚',
-            'bottom-right' => '╝',
-            'left'         => '║',
-            'left-mid'     => '╠',
-            'mid'          => '═',
-            'mid-mid'      => '╬',
-            'right'        => '║',
-            'right-mid'    => '╣',
-            'middle'       => '║'
-            ],
-        'double_single' => [
-            'top'          => '═',
-            'top-mid'      => '╤',
-            'top-left'     => '╔',
-            'top-right'    => '╗',
-            'bottom'       => '═',
-            'bottom-mid'   => '╧',
-            'bottom-left'  => '╚',
-            'bottom-right' => '╝',
-            'left'         => '║',
-            'left-mid'     => '╟',
-            'mid'          => '─',
-            'mid-mid'      => '┼',
-            'right'        => '║',
-            'right-mid'    => '╢',
-            'middle'       => '│'
-            ]
-    ];
+	/**
+	 * Border Characters
+	 * see: https://unicode-table.com/en/blocks/box-drawing/
+	 * @var    array
+	 * @access private
+	 **/
+	private $border_chars = [
+		'simple' => [
+			'top'          => '-',
+			'top-mid'      => '+',
+			'top-left'     => '+',
+			'top-right'    => '+',
+			'bottom'       => '-',
+			'bottom-mid'   => '+',
+			'bottom-left'  => '+',
+			'bottom-right' => '+',
+			'left'         => '|',
+			'left-mid'     => '+',
+			'mid'          => '-',
+			'mid-mid'      => '+',
+			'right'        => '|',
+			'right-mid'    => '+',
+			'middle'       => '|'
+			],
+		'single' => [
+			'right-mid'    => '+',
+			'top'          => '─',
+			'top-mid'      => '┬',
+			'top-left'     => '┌',
+			'top-right'    => '┐',
+			'bottom'       => '─',
+			'bottom-mid'   => '┴',
+			'bottom-left'  => '└',
+			'bottom-right' => '┘',
+			'left'         => '│',
+			'left-mid'     => '├',
+			'mid'          => '─',
+			'mid-mid'      => '┼',
+			'right'        => '│',
+			'right-mid'    => '┤',
+			'middle'       => '│'
+			],
+		'double' => [
+			'top'          => '═',
+			'top-mid'      => '╦',
+			'top-left'     => '╔',
+			'top-right'    => '╗',
+			'bottom'       => '═',
+			'bottom-mid'   => '╩',
+			'bottom-left'  => '╚',
+			'bottom-right' => '╝',
+			'left'         => '║',
+			'left-mid'     => '╠',
+			'mid'          => '═',
+			'mid-mid'      => '╬',
+			'right'        => '║',
+			'right-mid'    => '╣',
+			'middle'       => '║'
+			],
+		'double_single' => [
+			'top'          => '═',
+			'top-mid'      => '╤',
+			'top-left'     => '╔',
+			'top-right'    => '╗',
+			'bottom'       => '═',
+			'bottom-mid'   => '╧',
+			'bottom-left'  => '╚',
+			'bottom-right' => '╝',
+			'left'         => '║',
+			'left-mid'     => '╟',
+			'mid'          => '─',
+			'mid-mid'      => '┼',
+			'right'        => '║',
+			'right-mid'    => '╢',
+			'middle'       => '│'
+			]
+	];
 
-    /**
-     * colors
-     * chr(27).'[1;34m',
-     * @var    array
-     * @access private
-     **/
-    private $text_colors = [
-        'lightblue'     => '[1;34m',
-        'lightred'      => '[1;31m',
-        'lightgreen'    => '[1;32m',
-        'lightyellow'   => '[1;33m',
-        'lightblack'    => '[1;30m',
-        'lightmagenta'  => '[1;35m',
-        'lightcyan'     => '[1;36m',
-        'lightwhite'    => '[1;37m',
-        'blue'          => '[0;34m',
-        'red'           => '[0;31m',
-        'green'         => '[0;32m',
-        'yellow'        => '[0;33m',
-        'black'         => '[0;30m',
-        'magenta'       => '[0;35m',
-        'cyan'          => '[0;36m',
-        'white'         => '[0;37m',
-        'orange'        => '[38;5;214m', // if supported by the terminal
-        'reset'         => '[0m'
-    ];
+	/**
+	 * colors
+	 * chr(27).'[1;34m',
+	 * @var    array
+	 * @access private
+	 **/
+	private $text_colors = [
+		'lightblue'     => '[1;34m',
+		'lightred'      => '[1;31m',
+		'lightgreen'    => '[1;32m',
+		'lightyellow'   => '[1;33m',
+		'lightblack'    => '[1;30m',
+		'lightmagenta'  => '[1;35m',
+		'lightcyan'     => '[1;36m',
+		'lightwhite'    => '[1;37m',
+		'blue'          => '[0;34m',
+		'red'           => '[0;31m',
+		'green'         => '[0;32m',
+		'yellow'        => '[0;33m',
+		'black'         => '[0;30m',
+		'magenta'       => '[0;35m',
+		'cyan'          => '[0;36m',
+		'white'         => '[0;37m',
+		'orange'        => '[38;5;214m', // if supported by the terminal
+		'reset'         => '[0m'
+	];
 
-    private $text_colors_win32 = [
-        'lightblue'     => '[?1;34m',
-        'lightred'      => '[?1;31m',
-        'lightgreen'    => '[?1;32m',
-        'lightyellow'   => '[?1;33m',
-        'lightblack'    => '[?1;30m',
-        'lightmagenta'  => '[?1;35m',
-        'lightcyan'     => '[?1;36m',
-        'lightwhite'    => '[?1;37m',
-        'blue'          => '[0;34m',
-        'red'           => '[0;31m',
-        'green'         => '[0;32m',
-        'yellow'        => '[0;33m',
-        'black'         => '[0;30m',
-        'magenta'       => '[0;35m',
-        'cyan'          => '[0;36m',
-        'white'         => '[0;37m',
-        'orange'        => '[38;5;214m', // if supported by the terminal
-        'reset'         => '[0m'
-    ];
+	private $text_colors_win32 = [
+		'lightblue'     => '[?1;34m',
+		'lightred'      => '[?1;31m',
+		'lightgreen'    => '[?1;32m',
+		'lightyellow'   => '[?1;33m',
+		'lightblack'    => '[?1;30m',
+		'lightmagenta'  => '[?1;35m',
+		'lightcyan'     => '[?1;36m',
+		'lightwhite'    => '[?1;37m',
+		'blue'          => '[0;34m',
+		'red'           => '[0;31m',
+		'green'         => '[0;32m',
+		'yellow'        => '[0;33m',
+		'black'         => '[0;30m',
+		'magenta'       => '[0;35m',
+		'cyan'          => '[0;36m',
+		'white'         => '[0;37m',
+		'orange'        => '[38;5;214m', // if supported by the terminal
+		'reset'         => '[0m'
+	];
 
-    /**
-     * Definition of Defaut Table Format values
-     * @var    array
-     * @access private
-     **/
-    private $default_cfg = [
-        'block_type'    => 'Full_block', // not used for now
-        'orientation'   => 'V', // for now only 'V'
-        'graph_type'    => 'bar', // For now only 'bar'
-        'border_chars'  => 'simple', // for now only 'simple'
-        'graph_length'  => 10,
-        'bar_color'  => 'lightwhite',
-        'title'  => '',
-        'draw_underlines' => true,
-        'underlines_every'  => 1,
-        'bar_width'  => 1,
-        'show_y_axis_title' => true,
-        'show_x_axis_title' => true,
-        'x_axis_title' => 'AXIS X',
-        'y_axis_title' => 'AXIS Y',
-        'padding_left' => 1,
-        'padding_right' => 1,
-        'padding_top' => 1,
-        'padding_bottom' => 1,
-        'explain_values' => true,
-        'explain_values_same_line' => false
-    ];
+	/**
+	 * Definition of Defaut Table Format values
+	 * @var    array
+	 * @access private
+	 **/
+	private $default_cfg = [
+		'block_type'    => 'Full_block', // not used for now
+		'orientation'   => 'V', // for now only 'V'
+		'graph_type'    => 'bar', // For now only 'bar'
+		'border_chars'  => 'simple', // for now only 'simple'
+		'graph_length'  => 10,
+		'bar_color'  => 'lightwhite',
+		'title'  => '',
+		'draw_underlines' => true,
+		'underlines_every'  => 1,
+		'bar_width'  => 1,
+		'show_y_axis_title' => true,
+		'show_x_axis_title' => true,
+		'x_axis_title' => 'AXIS X',
+		'y_axis_title' => 'AXIS Y',
+		'padding_left' => 1,
+		'padding_right' => 1,
+		'padding_top' => 1,
+		'padding_bottom' => 1,
+		'explain_values' => true,
+		'explain_values_same_line' => false
+	];
 
 	private $data = [];
 	private $config = [];
@@ -341,348 +341,348 @@ ini_set('default_charset', 'UTF-8');
 		$this->Quadrant_upper_right_and_lower_left_and_lower_right  = html_entity_decode('▟', ENT_NOQUOTES, 'UTF-8');
 	}
 
-    /**
-     * Set DATA
-     * @param array $data
-     */
-    public function set_data(array $data)
+	/**
+	 * Set DATA
+	 * @param array $data
+	 */
+	public function set_data(array $data)
 	{
-        $this->data = $data;
-        $this->count_data = count($this->data);
-        $this->max_value = max($this->data);
-        $this->min_value = min($this->data);
+		$this->data = $data;
+		$this->count_data = count($this->data);
+		$this->max_value = max($this->data);
+		$this->min_value = min($this->data);
 		$this->data_width = $this->count_data * $this->bar_width;
-    }
+	}
 
-    /**
-     * Set array of id's visibles even the value is 0
-     * Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
-     * @param array $arr_id_data_visible
-     */
-    public function set_arr_id_data_visible(bool $arr_id_data_visible)
+	/**
+	 * Set array of id's visibles even the value is 0
+	 * Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
+	 * @param array $arr_id_data_visible
+	 */
+	public function set_arr_id_data_visible(bool $arr_id_data_visible)
 	{
-        $this->arr_id_data_visible = $arr_id_data_visible;
-    }
+		$this->arr_id_data_visible = $arr_id_data_visible;
+	}
 
-    /**
-     * Set EXPLAIN VALUES
-     * @param boolean $explain_values
-     */
-    public function set_explain_values(bool $explain_values = true)
+	/**
+	 * Set EXPLAIN VALUES
+	 * @param boolean $explain_values
+	 */
+	public function set_explain_values(bool $explain_values = true)
 	{
-        $this->config['explain_values'] = $explain_values;
-    }
+		$this->config['explain_values'] = $explain_values;
+	}
 
-    /**
-     * Set BAR COLOR
-     * @param string $bar_color
-     */
-    public function set_bar_color(string $bar_color = 'lightwhite')
+	/**
+	 * Set BAR COLOR
+	 * @param string $bar_color
+	 */
+	public function set_bar_color(string $bar_color = 'lightwhite')
 	{
 		if(array_key_exists($bar_color, $this->text_colors)){
 			$this->config['bar_color'] = $bar_color;
 		} else {
 			throw new Exception('Color not defined');
 		}
-    }
+	}
 
-    /**
-     * Set EXPLAIN VALUES SAME LINE
-     * @param boolean $explain_values_same_line
-     */
-    public function set_explain_values_same_line(bool $explain_values_same_line = true)
+	/**
+	 * Set EXPLAIN VALUES SAME LINE
+	 * @param boolean $explain_values_same_line
+	 */
+	public function set_explain_values_same_line(bool $explain_values_same_line = true)
 	{
-        $this->config['explain_values_same_line'] = $explain_values_same_line;
-        if($this->config['explain_values_same_line']){
-            $this->set_explain_values(); // Default true
-        }
-    }
+		$this->config['explain_values_same_line'] = $explain_values_same_line;
+		if($this->config['explain_values_same_line']){
+			$this->set_explain_values(); // Default true
+		}
+	}
 
-    /**
-     * Set Outlier Factor
-     * @param double $outlier_factor
-     */
-    public function set_outlier_factor(int $outlier_factor = 2)
+	/**
+	 * Set Outlier Factor
+	 * @param double $outlier_factor
+	 */
+	public function set_outlier_factor(int $outlier_factor = 2)
 	{
-        $this->outlier_factor = $outlier_factor;
-    }
+		$this->outlier_factor = $outlier_factor;
+	}
 
-    /**
-     * Set TITLE
-     * @param string $title
-     */
-    public function set_title(string $title = '')
+	/**
+	 * Set TITLE
+	 * @param string $title
+	 */
+	public function set_title(string $title = '')
 	{
-        $this->config['title'] = $title;
-    }
+		$this->config['title'] = $title;
+	}
 
-    /**
-     * Set draw underlines every x rows
-     * @param integer $underlines_every
-     */
-    public function set_underlines_every(int $underlines_every = 1)
+	/**
+	 * Set draw underlines every x rows
+	 * @param integer $underlines_every
+	 */
+	public function set_underlines_every(int $underlines_every = 1)
 	{
-        $this->config['underlines_every'] = $underlines_every;
-    }
+		$this->config['underlines_every'] = $underlines_every;
+	}
 
-    /**
-     * Set X AXIS TITLE
-     * @param string $x_axis_title
-     */
-    public function set_x_axis_title(string $x_axis_title = '')
+	/**
+	 * Set X AXIS TITLE
+	 * @param string $x_axis_title
+	 */
+	public function set_x_axis_title(string $x_axis_title = '')
 	{
-        $this->config['x_axis_title'] = $x_axis_title;
-    }
+		$this->config['x_axis_title'] = $x_axis_title;
+	}
 
-    /**
-     * Set Y AXIS TITLE
-     * @param string $y_axis_title
-     */
-    public function set_y_axis_title(string $y_axis_title = '')
+	/**
+	 * Set Y AXIS TITLE
+	 * @param string $y_axis_title
+	 */
+	public function set_y_axis_title(string $y_axis_title = '')
 	{
-        $this->config['y_axis_title'] = $y_axis_title;
-    }
+		$this->config['y_axis_title'] = $y_axis_title;
+	}
 
-    /**
-     * Set SHOW X AXIS TITLE
-     * @param boolean $show_x_axis_title
-     */
-    public function set_show_x_axis_title(bool $show_x_axis_title = true)
+	/**
+	 * Set SHOW X AXIS TITLE
+	 * @param boolean $show_x_axis_title
+	 */
+	public function set_show_x_axis_title(bool $show_x_axis_title = true)
 	{
-        $this->config['show_x_axis_title'] = $show_x_axis_title;
-    }
+		$this->config['show_x_axis_title'] = $show_x_axis_title;
+	}
 
-    /**
-     * Set SHOW Y AXIS TITLE
-     * @param boolean $show_y_axis_title
-     */
-    public function set_show_y_axis_title(bool $show_y_axis_title = true)
+	/**
+	 * Set SHOW Y AXIS TITLE
+	 * @param boolean $show_y_axis_title
+	 */
+	public function set_show_y_axis_title(bool $show_y_axis_title = true)
 	{
-        $this->config['show_y_axis_title'] = $show_y_axis_title;
-    }
+		$this->config['show_y_axis_title'] = $show_y_axis_title;
+	}
 
-    /**
-     * Set SHOW X,Y AXIS TITLE
-     * @param boolean $show_axis_titles
-     */
-    public function set_show_axis_titles(bool $show_axis_titles = true)
+	/**
+	 * Set SHOW X,Y AXIS TITLE
+	 * @param boolean $show_axis_titles
+	 */
+	public function set_show_axis_titles(bool $show_axis_titles = true)
 	{
-        $this->set_show_x_axis_title($show_axis_titles);
-        $this->set_show_y_axis_title($show_axis_titles);
-    }
+		$this->set_show_x_axis_title($show_axis_titles);
+		$this->set_show_y_axis_title($show_axis_titles);
+	}
 
-    /**
-     * Set PADDING
-     * @param integer $padding
-     */
-    public function set_padding(int $padding = 1)
+	/**
+	 * Set PADDING
+	 * @param integer $padding
+	 */
+	public function set_padding(int $padding = 1)
 	{
-        $this->set_left_padding($padding);
-        $this->set_right_padding($padding);
-        $this->set_top_padding($padding);
-        $this->set_bottom_padding($padding);
-    }
+		$this->set_left_padding($padding);
+		$this->set_right_padding($padding);
+		$this->set_top_padding($padding);
+		$this->set_bottom_padding($padding);
+	}
 
-    /**
-     * Set SET LEFT PADDING
-     * @param integer $left_padding
-     */
-    public function set_left_padding(int $left_padding = 1)
+	/**
+	 * Set SET LEFT PADDING
+	 * @param integer $left_padding
+	 */
+	public function set_left_padding(int $left_padding = 1)
 	{
-        $this->config['left_padding'] = $left_padding;
-    }
+		$this->config['left_padding'] = $left_padding;
+	}
 
-    /**
-     * Set SET RIGHT PADDING
-     * @param integer $left_padding
-     */
-    public function set_right_padding(int $right_padding = 1)
+	/**
+	 * Set SET RIGHT PADDING
+	 * @param integer $left_padding
+	 */
+	public function set_right_padding(int $right_padding = 1)
 	{
-        $this->config['right_padding'] = $right_padding;
-    }
+		$this->config['right_padding'] = $right_padding;
+	}
 
-    /**
-     * Set SET TOP PADDING
-     * @param integer $top_padding
-     */
-    public function set_top_padding(int $top_padding = 1)
+	/**
+	 * Set SET TOP PADDING
+	 * @param integer $top_padding
+	 */
+	public function set_top_padding(int $top_padding = 1)
 	{
-        $this->config['top_padding'] = $top_padding;
-    }
+		$this->config['top_padding'] = $top_padding;
+	}
 
-    /**
-     * Set SET BOTTOM PADDING
-     * @param integer $bottom_padding
-     */
-    public function set_bottom_padding(int $bottom_padding = 1)
+	/**
+	 * Set SET BOTTOM PADDING
+	 * @param integer $bottom_padding
+	 */
+	public function set_bottom_padding(int $bottom_padding = 1)
 	{
-        $this->config['bottom_padding'] = $bottom_padding;
-    }
+		$this->config['bottom_padding'] = $bottom_padding;
+	}
 
-    /**
-     * Set Graph Length
-     * @param integer $length
-     */
-    public function set_graph_length(int $length = 10)
+	/**
+	 * Set Graph Length
+	 * @param integer $length
+	 */
+	public function set_graph_length(int $length = 10)
 	{
-        $this->graph_length = $length;
-    }
+		$this->graph_length = $length;
+	}
 
-    /**
-     * Set DRAW UNDERLINES
-     * @param boolean $draw_underlines
-     */
-    public function set_draw_underlines(bool $draw_underlines = true)
+	/**
+	 * Set DRAW UNDERLINES
+	 * @param boolean $draw_underlines
+	 */
+	public function set_draw_underlines(bool $draw_underlines = true)
 	{
-        $this->config['draw_underlines'] = $draw_underlines;
-    }
+		$this->config['draw_underlines'] = $draw_underlines;
+	}
 
-    /**
-     * Set BAR WIDTH
-     * @param integer $bar_width
-     */
-    public function set_bar_width(int $bar_width = 1)
+	/**
+	 * Set BAR WIDTH
+	 * @param integer $bar_width
+	 */
+	public function set_bar_width(int $bar_width = 1)
 	{
-        $this->bar_width = $bar_width;
+		$this->bar_width = $bar_width;
 		$this->data_width = $this->count_data * $bar_width;
-    }
+	}
 
-    /**
-     * Set AXIS X VALUES
-     * @param array $axis_x_values
-     */
-    public function set_axis_x_values(array $axis_x_values)
+	/**
+	 * Set AXIS X VALUES
+	 * @param array $axis_x_values
+	 */
+	public function set_axis_x_values(array $axis_x_values)
 	{
-        $this->axis_x_values = $axis_x_values;
-    }
+		$this->axis_x_values = $axis_x_values;
+	}
 
-    /**
-     * Set CONFIG
-     * @param array $config
-     */
-    public function set_config(array $config)
+	/**
+	 * Set CONFIG
+	 * @param array $config
+	 */
+	public function set_config(array $config)
 	{
-        $this->config = $config;
-    }
+		$this->config = $config;
+	}
 
-    /**
-     * Get Config PARAM
-     * @param string $param
-     * @return string $param
-     */
-    private function get_cfg_param(string $param)
+	/**
+	 * Get Config PARAM
+	 * @param string $param
+	 * @return string $param
+	 */
+	private function get_cfg_param(string $param)
 	{
-        return (isset($this->config[$param])) ? $this->config[$param] : $this->default_cfg[$param];
-    }
+		return (isset($this->config[$param])) ? $this->config[$param] : $this->default_cfg[$param];
+	}
 
-    /**
-     * Get Str chars of down X axis border
-     * @return string $border
-     */
-    private function get_down_border()
+	/**
+	 * Get Str chars of down X axis border
+	 * @return string $border
+	 */
+	private function get_down_border()
 	{
-        $border_cfg = $this->border_chars[$this->get_cfg_param('border_chars')];
+		$border_cfg = $this->border_chars[$this->get_cfg_param('border_chars')];
 
-        $chr_corner = html_entity_decode($border_cfg['bottom-left'], ENT_NOQUOTES, 'UTF-8');
-        $chr_line   = html_entity_decode($border_cfg['bottom'], ENT_NOQUOTES, 'UTF-8');
+		$chr_corner = html_entity_decode($border_cfg['bottom-left'], ENT_NOQUOTES, 'UTF-8');
+		$chr_line   = html_entity_decode($border_cfg['bottom'], ENT_NOQUOTES, 'UTF-8');
 
-        return $chr_corner.str_repeat($chr_line, $this->data_width + 2); // +2 free space left & right
-    }
+		return $chr_corner.str_repeat($chr_line, $this->data_width + 2); // +2 free space left & right
+	}
 
-    /**
-     * Get Str chars of up X axis border
-     * @return string $border
-     */
-    private function get_up_border()
+	/**
+	 * Get Str chars of up X axis border
+	 * @return string $border
+	 */
+	private function get_up_border()
 	{
-        $chr_corner = ' ';
-        $chr_line   = '_';
-        return $chr_corner.str_repeat($chr_line, $this->data_width + 2); // +2 = free space left and right
-    }
+		$chr_corner = ' ';
+		$chr_line   = '_';
+		return $chr_corner.str_repeat($chr_line, $this->data_width + 2); // +2 = free space left and right
+	}
 
-    /**
-     * Prepare Graph Lines
-     */
-    private function prepare_graph_lines()
+	/**
+	 * Prepare Graph Lines
+	 */
+	private function prepare_graph_lines()
 	{
-        $this->arr_prepare_output = [];
+		$this->arr_prepare_output = [];
 
-        for($i = 0; $i < $this->count_data; $i++){
-            $full = (int)($this->data[$i] * $this->graph_length / $this->max_value);
-            $empty = $this->graph_length - $full;
+		for($i = 0; $i < $this->count_data; $i++){
+			$full = (int)($this->data[$i] * $this->graph_length / $this->max_value);
+			$empty = $this->graph_length - $full;
 
-            $StrPrepare = '';
+			$StrPrepare = '';
 
-            if($full > 0){
-                $StrPrepare .= str_repeat('1', $full);
-            }
+			if($full > 0){
+				$StrPrepare .= str_repeat('1', $full);
+			}
 
-            if($empty > 0){
-                $StrPrepare .= str_repeat('0', $empty);
-            }
+			if($empty > 0){
+				$StrPrepare .= str_repeat('0', $empty);
+			}
 
-            $this->arr_prepare_output[] = $StrPrepare;
-        }
-    }
+			$this->arr_prepare_output[] = $StrPrepare;
+		}
+	}
 
-    /**
-     * Get Graph Line
-     * @param integer $id_line (begin 0 with top line graph)
+	/**
+	 * Get Graph Line
+	 * @param integer $id_line (begin 0 with top line graph)
 	 * @param integer $low_limit
 	 * @param integer $high_limit
-     * @return string str_line
-     */
-    private function get_graph_line($id_line, $low_limit, $high_limit)
+	 * @return string str_line
+	 */
+	private function get_graph_line($id_line, $low_limit, $high_limit)
 	{
-        $str_line = '';
+		$str_line = '';
 		$explain = $this->get_cfg_param('explain_values');
 		$bar_color = $this->text_colors[$this->get_cfg_param('bar_color')];
-        $chr_underlines = ($this->get_cfg_param('draw_underlines') && (($id_line+1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
+		$chr_underlines = ($this->get_cfg_param('draw_underlines') && (($id_line+1) % $this->get_cfg_param('underlines_every') == 0)) ? '_' : ' ';
 		
-        foreach($this->data as $key => $data){
-            if($this->arr_prepare_output[$key][$this->graph_length-$id_line-1]=='1'){
-                $str_line .= chr(27);
-                if($explain && ($data < $low_limit || $data > $high_limit)){
-                    $str_line .= $this->text_colors['red'];
-                } else {
+		foreach($this->data as $key => $data){
+			if($this->arr_prepare_output[$key][$this->graph_length-$id_line-1]=='1'){
+				$str_line .= chr(27);
+				if($explain && ($data < $low_limit || $data > $high_limit)){
+					$str_line .= $this->text_colors['red'];
+				} else {
 					$str_line .= $bar_color;
 				}
-                for($i = 0; $i < $this->bar_width-1; $i++){
-                    $str_line .= $this->Full_block;
-                }
-                //Quadrant_lower_left
-                $str_line .= $this->Left_half_block;
-                $str_line .= chr(27).'[0m';
-            } else {
-                if($this->graph_length-1 == $id_line && in_array($key, $this->arr_id_data_visible)){
-                    // We need to draw someting to show the value exists, unless is 0
-                    for($i = 0; $i < $this->bar_width-1; $i++){
-                        $str_line .= $this->Lower_half_block;
-                    }
-                    $str_line .= $this->Lower_half_block; //$this->Quadrant_lower_left; // dont work ????
-                } else {
-                    for($i = 0; $i < $this->bar_width; $i++){
-                        $str_line .= $chr_underlines; // Fill with graph char code of ' '
-                    }
-                }
-            }
-        }
+				for($i = 0; $i < $this->bar_width-1; $i++){
+					$str_line .= $this->Full_block;
+				}
+				//Quadrant_lower_left
+				$str_line .= $this->Left_half_block;
+				$str_line .= chr(27).'[0m';
+			} else {
+				if($this->graph_length-1 == $id_line && in_array($key, $this->arr_id_data_visible)){
+					// We need to draw someting to show the value exists, unless is 0
+					for($i = 0; $i < $this->bar_width-1; $i++){
+						$str_line .= $this->Lower_half_block;
+					}
+					$str_line .= $this->Lower_half_block; //$this->Quadrant_lower_left; // dont work ????
+				} else {
+					for($i = 0; $i < $this->bar_width; $i++){
+						$str_line .= $chr_underlines; // Fill with graph char code of ' '
+					}
+				}
+			}
+		}
 
-        return $str_line;
-    }
+		return $str_line;
+	}
 
 	private function prepare_default_append()
 	{
-        // Blank space of left values
-        $str_blank_left_values = str_repeat(' ', strlen($this->max_value));
+		// Blank space of left values
+		$str_blank_left_values = str_repeat(' ', strlen($this->max_value));
 
-        // Blank char for title Axis Y
+		// Blank char for title Axis Y
 		// One space for the title & other for separate from 'Axis Y' values
-        $str_char_title_y = ($this->get_cfg_param('show_y_axis_title')) ? '  ' : ''; 
-        $str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
+		$str_char_title_y = ($this->get_cfg_param('show_y_axis_title')) ? '  ' : ''; 
+		$str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
 
 		$this->padding_left = $str_padding_left.$str_char_title_y.$str_blank_left_values;
-        $this->padding_right = str_repeat(' ', $this->get_cfg_param('padding_right'));
+		$this->padding_right = str_repeat(' ', $this->get_cfg_param('padding_right'));
 	}
 
 	private function default_append($string)
@@ -754,10 +754,10 @@ ini_set('default_charset', 'UTF-8');
 		}
 	}
 
-    /**
-     * Prepare Output in Array
-     */
-    public function prepare_array_output()
+	/**
+	 * Prepare Output in Array
+	 */
+	public function prepare_array_output()
 	{
 		$this->arr_output = [];
 		$this->prepare_default_append();
@@ -829,54 +829,54 @@ ini_set('default_charset', 'UTF-8');
 			 // +1 = vertical col axis separator, +2 = free space left and right
 			$this->default_append($this->default_padded(''));
 		}
-    }
+	}
 
-    /**
-     * Get count(lines) of graph output
-     * return integer $num_lines
-     */
-    public function count_output_lines()
+	/**
+	 * Get count(lines) of graph output
+	 * return integer $num_lines
+	 */
+	public function count_output_lines()
 	{
-        return count($this->arr_output);
-    }
+		return count($this->arr_output);
+	}
 
-    /**
-     * Draw Graph
-     * You can draw only 1 line id by $line_id
-     * Combine it with $do_line_break = false &, $prepare_array_output = true to prepare 1 time externally & write in each line more than 1 graphs. See example.php
-     * @param integer $line_id
-     * @param boolean $do_line_break
-     * @param boolean $prepare_array_output
-     */
-    public function draw($line_id = null, $do_line_break = true, $prepare_array_output = true)
+	/**
+	 * Draw Graph
+	 * You can draw only 1 line id by $line_id
+	 * Combine it with $do_line_break = false &, $prepare_array_output = true to prepare 1 time externally & write in each line more than 1 graphs. See example.php
+	 * @param integer $line_id
+	 * @param boolean $do_line_break
+	 * @param boolean $prepare_array_output
+	 */
+	public function draw($line_id = null, $do_line_break = true, $prepare_array_output = true)
 	{
-        if($prepare_array_output){
-            $this->prepare_array_output();
-        }
+		if($prepare_array_output){
+			$this->prepare_array_output();
+		}
 
-        if(is_null($line_id)){
-            foreach($this->arr_output as $output_line){
-                echo $output_line;
-                if ($do_line_break) echo PHP_EOL;
-            }
+		if(is_null($line_id)){
+			foreach($this->arr_output as $output_line){
+				echo $output_line;
+				if ($do_line_break) echo PHP_EOL;
+			}
 
-        } else {
-            echo $this->arr_output[$line_id];
-            if ($do_line_break) echo PHP_EOL;
-        }
-    }
+		} else {
+			echo $this->arr_output[$line_id];
+			if ($do_line_break) echo PHP_EOL;
+		}
+	}
 
-    /**
-     * Justify a string
-     */
-    private function justify(array $vals, int $limit)
+	/**
+	 * Justify a string
+	 */
+	private function justify(array $vals, int $limit)
 	{
-        $s = trim(implode(" ", $vals));
-        $l = strlen($s);
+		$s = trim(implode(" ", $vals));
+		$l = strlen($s);
 
-        if($l >= $limit){
-            $ret = wordwrap($s, $limit);
-        } else {
+		if($l >= $limit){
+			$ret = wordwrap($s, $limit);
+		} else {
 			$c = count($vals) - 1;
 			$h = ceil(($limit - $l + $c) / $c);
 			$ret = str_replace(' ', str_repeat(' ', $h), $s);
