@@ -111,8 +111,8 @@ $bar_graph[] = new cli_graph_ml( $arr_val_example_3, $axis_x_values, $config );
 $bar_graph[2]->set_title( 'Months 3 in %' );
 
 // Prepare on each graph
-foreach( $bar_graph as$graph){
-    $graph->prepare_array_output( );
+foreach( $bar_graph as $graph){
+    $graph->prepare_array_output();
 }
 
 // draw on each graph each line
@@ -120,10 +120,9 @@ foreach( $bar_graph as$graph){
 // We take a counter of lines of the first graph. We assume all have the same
 $count_output_lines = $bar_graph[0]->count_output_lines();
 
-for( $i = 0; $i< $count_output_lines; $i++ ){
+for( $i = 0; $i < $count_output_lines; $i++ ){
     foreach( $bar_graph as $graph){
         $graph->draw( $i, false, false); // Draw line $i, dont do line break and do not do prepare
     }
-
     echo PHP_EOL; // for get new line
 }
