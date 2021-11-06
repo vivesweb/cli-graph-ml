@@ -611,17 +611,17 @@ class cli_graph_ml
 			$full = (int)($this->data[$i] * $this->graph_length / $this->max_value);
 			$empty = $this->graph_length - $full;
 
-			$StrPrepare = '';
+			$strPrepare = '';
 
 			if($full > 0){
-				$StrPrepare .= str_repeat('1', $full);
+				$strPrepare .= str_repeat('1', $full);
 			}
 
 			if($empty > 0){
-				$StrPrepare .= str_repeat('0', $empty);
+				$strPrepare .= str_repeat('0', $empty);
 			}
 
-			$this->arr_prepare_output[] = $StrPrepare;
+			$this->arr_prepare_output[] = $strPrepare;
 		}
 	}
 
