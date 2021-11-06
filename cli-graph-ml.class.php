@@ -773,16 +773,12 @@ ini_set('default_charset', 'UTF-8');
 		$y_blocks = ($this->max_value - $this->min_value) / $this->graph_length;
 		$max_y_length = strlen(strval($this->max_value));
 		// if is <10, we need to add 1 decimal. Then the strlen is added with decimal separator and one number
-		if($this->max_value - $this->min_value < 10){
-			$max_y_length += 2;
-		}
+		$val_diff_single_digit = ($this->max_value - $this->min_value) < 10;
+		($val_diff_single_digit) AND $max_y_length += 2;
 
 		for($i = 0; $i < $this->graph_length; $i++){
-			if($this->max_value - $this->min_value < 10){
-				$value_y = number_format($this->max_value - $y_blocks * $i, 1, '.', '');
-			} else {
-				$value_y = (int)($this->max_value - $y_blocks * $i);
-			}
+			$value_y = $this->max_value - $y_blocks * $i;
+			$value_y = ($val_diff_single_digit) ? number_format($value_y, 1, '.', '') : (int)$value_y;
 			$value_y = str_pad($value_y, $max_y_length, ' ', STR_PAD_LEFT);
 			$str_char_title_y_loop = ($show_y_axis_title) ? $str_pad_axis_y_title[$i].' ' : '';
 			$chr_underlines = ($draw_underlines && (($i + 1) % $underlines_every == 0)) ? '_' : ' ';
