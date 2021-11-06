@@ -875,11 +875,13 @@ ini_set('default_charset', 'UTF-8');
         $l = strlen($s);
 
         if($l >= $limit){
-            return wordwrap($s, $limit);
+            $ret = wordwrap($s, $limit);
         } else {
 			$c = count($vals) - 1;
 			$h = ceil(($limit - $l + $c) / $c);
-			return str_replace(' ', str_repeat(' ', $h), $s);
+			$ret = str_replace(' ', str_repeat(' ', $h), $s);
 		}
+
+		return $ret;
 	}
 }
