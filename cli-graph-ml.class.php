@@ -678,14 +678,9 @@ ini_set('default_charset', 'UTF-8');
 		return str_pad($string, $this->data_width + 3, ' ', STR_PAD_BOTH);
 	}
 
-	# We need this to populate outl_up_limit & outl_down_limit
-	private function prepare_explain(){
+	private function calc_average(){
 		$sum = array_sum($this->data);
 		$avg = $sum / $this->count_data;
-		$arr_sort = $this->data;
-		$pos_median = ($this->count_data + 1) / 2;
-		sort($arr_sort, SORT_NUMERIC);
-		$median = (double)((($this->count_data % 2 != 0)) ? $arr_sort[$pos_median - 1] : ($arr_sort[$pos_median - 1] + $arr_sort[$pos_median]) / 2);
 		$sum_median = 0;
 
 		for($i=0; $i < $this->count_data; $i++){
@@ -696,27 +691,28 @@ ini_set('default_charset', 'UTF-8');
 		$vari = $sum_median/$this->count_data;
 		$std = sqrt($vari);
 
-		return [
-			'Sum' => $sum,
-			'Avg' => $avg,
-			'Median' => $median,
-			'Vari' => $vari,
-			'Std Dsv' => $std,
-			'O ^ Lim' => $avg + $std * $this->outlier_factor,
-			'O v Lim' => $avg - $std * $this->outlier_factor
-		];
+		return [$avg, $std];
 	}
 
-	private function append_explain($arr){
+	private function append_explain($avg, $std, $high_limit, $low_limit){
+		$sum = $avg * $this->count_data;
+		$arr_sort = $this->data;
+		$pos_median = ($this->count_data + 1) / 2;
+		sort($arr_sort, SORT_NUMERIC);
+		$median = (double)((($this->count_data % 2 != 0)) ? $arr_sort[$pos_median - 1] : ($arr_sort[$pos_median - 1] + $arr_sort[$pos_median]) / 2);
+		$vari = $std * $std;
 
 		$arr_explain = [
 			'Max '.$this->max_value,
-			'Min '.$this->min_value
+			'Min '.$this->min_value,
+			'Sum' => number_format($sum, 2, '.', ''),
+			'Avg' => number_format($avg, 2, '.', ''),
+			'Median' => number_format($median, 2, '.', ''),
+			'Vari' => number_format($vari, 2, '.', ''),
+			'Std Dsv' => number_format($std, 2, '.', ''),
+			'O ^ Lim' => number_format($high_limit, 2, '.', ''),
+			'O v Lim' => number_format($low_limit, 2, '.', '')
 		];
-
-		foreach($arr as $val => $num){
-			$arr_explain[] = $val." ".number_format($num, 2, '.', '');		
-		}
 
 		if($this->get_cfg_param('explain_values_same_line')){
 			// For compatibility with other functions, we need to cut the line if overrides de width capacity
@@ -740,7 +736,9 @@ ini_set('default_charset', 'UTF-8');
 
 		$this->arr_output = [];
 		$this->prepare_default_append();
-		$explain = $this->prepare_explain();
+		list($avg, $std) = $this->calc_average();
+		$high_limit = $avg + $std * $this->outlier_factor;
+		$low_limit = $avg - $std * $this->outlier_factor;
 		$this->prepare_graph_lines();
 
 		// Padding Top
@@ -762,10 +760,6 @@ ini_set('default_charset', 'UTF-8');
 		if($show_y_axis_title){
 			$str_pad_axis_y_title = str_pad($this->get_cfg_param('y_axis_title'), $this->graph_length, ' ', STR_PAD_BOTH);
 		}
-
-		// Get array of string graph
-		$high_limit = $explain['O ^ Lim'];
-		$low_limit = $explain['O v Lim'];
 
 		$underlines_every = $this->get_cfg_param('underlines_every');
 		$str_padding_left = str_repeat(' ', $this->get_cfg_param('padding_left'));
@@ -801,7 +795,7 @@ ini_set('default_charset', 'UTF-8');
 
 		// Explain Values
 		if($this->get_cfg_param('explain_values')){
-			$this->append_explain($explain);
+			$this->append_explain($avg, $std, $high_limit, $low_limit);
 		}
 
 		// Padding Bottom
