@@ -294,7 +294,7 @@ class cli_graph_ml
 	private $outlier_factor = 2;
 	private $arr_id_data_visible = []; // Array with the id's even the value is 0 and cannot be drawed in graph, but we need to know if there is a min() value in data. Then draw it with Lower_one_eighth_block
 
-    public function __construct($data = null, array $axis_x_values = [], array $config = [])
+	public function __construct($data = null, array $axis_x_values = [], array $config = [])
 	{
 		(!empty($config)) AND $this->set_config($config);
 
