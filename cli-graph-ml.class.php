@@ -568,7 +568,7 @@ ini_set('default_charset', 'UTF-8');
         $chr_corner = html_entity_decode($border_cfg['bottom-left'], ENT_NOQUOTES, 'UTF-8');
         $chr_line   = html_entity_decode($border_cfg['bottom'], ENT_NOQUOTES, 'UTF-8');
 
-        return $chr_corner.str_pad('', $this->data_width + 2, $chr_line); // +2 free space left & right
+        return $chr_corner.str_repeat($chr_line, $this->data_width + 2); // +2 free space left & right
     } // /get_down_border()
 
     /**
