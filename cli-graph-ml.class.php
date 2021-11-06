@@ -705,13 +705,13 @@ ini_set('default_charset', 'UTF-8');
 		$arr_explain = [
 			'Max '.$this->max_value,
 			'Min '.$this->min_value,
-			'Sum' => number_format($sum, 2, '.', ''),
-			'Avg' => number_format($avg, 2, '.', ''),
-			'Median' => number_format($median, 2, '.', ''),
-			'Vari' => number_format($vari, 2, '.', ''),
-			'Std Dsv' => number_format($std, 2, '.', ''),
-			'O ^ Lim' => number_format($high_limit, 2, '.', ''),
-			'O v Lim' => number_format($low_limit, 2, '.', '')
+			'Sum '.number_format($sum, 2, '.', ''),
+			'Avg '.number_format($avg, 2, '.', ''),
+			'Median '.number_format($median, 2, '.', ''),
+			'Vari '.number_format($vari, 2, '.', ''),
+			'Std Dsv '.number_format($std, 2, '.', ''),
+			'O ^ Lim '.number_format($high_limit, 2, '.', ''),
+			'O v Lim '.number_format($low_limit, 2, '.', '')
 		];
 
 		if($this->get_cfg_param('explain_values_same_line')){
