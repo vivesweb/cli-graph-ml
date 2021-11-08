@@ -808,9 +808,9 @@ class cli_graph_ml
 		$this->default_append($this->get_down_border());
 
 		// Axis X Separators |
-		$this->default_append($this->justify(array_fill(0, count($this->axis_x_values), "|"))." ");
+		$this->default_append("  ".$this->justify(array_fill(0, count($this->axis_x_values), "|"), -2)." ");
 		// Axis X Values
-		$this->default_append($this->justify($this->axis_x_values)." ");
+		$this->default_append(" ".$this->justify($this->axis_x_values));
 
 		// Axis X Title
 		if($this->get_cfg_param('show_x_axis_title')){
@@ -869,9 +869,9 @@ class cli_graph_ml
 	/**
 	 * Justify axis values
 	 */
-	private function justify(array $vals)
+	private function justify(array $vals, int $offset = 0)
 	{
-		$limit = $this->data_width + 4;
+		$limit = $this->data_width + 4 + $offset;
 		$s = trim(implode(" ", $vals));
 		$l = strlen($s);
 
