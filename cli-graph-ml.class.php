@@ -231,6 +231,27 @@ ini_set('default_charset', 'UTF-8');
         'reset'         => '[0m',
     ]; // /$text_colors
 
+	private $text_colors_win32 = [
+		'lightblue'     => '[?1;34m',
+		'lightred'      => '[?1;31m',
+		'lightgreen'    => '[?1;32m',
+		'lightyellow'   => '[?1;33m',
+		'lightblack'    => '[?1;30m',
+		'lightmagenta'  => '[?1;35m',
+		'lightcyan'     => '[?1;36m',
+		'lightwhite'    => '[?1;37m',
+		'blue'          => '[0;34m',
+		'red'           => '[0;31m',
+		'green'         => '[0;32m',
+		'yellow'        => '[0;33m',
+		'black'         => '[0;30m',
+		'magenta'       => '[0;35m',
+		'cyan'          => '[0;36m',
+		'white'         => '[0;37m',
+		'orange'        => '[38;5;214m',
+		'reset'         => '[0m'
+	];
+
     /**
      * Definition of Defaut Table Format values
      *
@@ -288,6 +309,10 @@ ini_set('default_charset', 'UTF-8');
 		if( !is_null($axis_x_values) ){
         	$this->set_axis_x_values( $axis_x_values );
         }
+
+		if (PHP_OS_FAMILY === "Windows") { # PHP 7.2+
+			$this->text_colors = $this->text_colors_win32;
+		}
 
         $this->Upper_half_block                                     = html_entity_decode('▀', ENT_NOQUOTES, 'UTF-8');
         $this->Lower_one_eighth_block                               = html_entity_decode('▁', ENT_NOQUOTES, 'UTF-8');
@@ -558,26 +583,6 @@ ini_set('default_charset', 'UTF-8');
     } // /get_up_border()
 
     /**
-     * Get Str Axis X values
-     * 
-     * @return string $str_axis_x_values
-     */
-    private function get_axis_x_values(){
-        return $this->justify(implode(' ', $this->axis_x_values), $this->count_data*$this->bar_width + 2 ); // The left and right margin of the graph will be used
-    } // /get_axis_x_values()
-
-    /**
-     * Get Str Axis X separators
-     * Used after draw down line of chart
-     * 
-     * @return string $str_axis_x_separators
-     */
-    private function get_axis_x_separators(){
-        $arr_separators = array_fill(0, count($this->axis_x_values), '|');
-        return $this->justify(implode(' ', $arr_separators), $this->count_data*$this->bar_width);
-    } // /get_axis_x_separators()
-
-    /**
      * Prepare Graph Lines
      */
     private function prepare_graph_lines(){
@@ -735,9 +740,9 @@ ini_set('default_charset', 'UTF-8');
         $this->arr_output[] = $left.$this->get_down_border().$str_padding_right;
 
         // Axis X Separators |
-        $this->arr_output[] = $left.'  '.$this->get_axis_x_separators().' '.$str_padding_right;
+        $this->arr_output[] = $left."  ".$this->justify(array_fill(0, count($this->axis_x_values), "|"), -2)." ".$str_padding_right;
         // Axis X Values
-        $this->arr_output[] = $left.' '.$this->get_axis_x_values().$str_padding_right;
+        $this->arr_output[] = $left." ".$this->justify($this->axis_x_values).$str_padding_right;
 
         // Axis X Title
         if( $this->get_cfg_param( 'show_x_axis_title' ) ){
@@ -822,37 +827,24 @@ ini_set('default_charset', 'UTF-8');
         }
     } // /draw()
 
-    /**
-     * Justify a string
-     * 
-     * Original:
-     * https://www.iteramos.com/pregunta/22339/justificar-cadena-de-algoritmo
-     * 
-     * @param string $string
-     * @param integer $num_chars
-     * @return string $justify_string
-     */
-    private function justify($string, $num_chars){
-        $s = trim($string);
-        $l = strlen($s);
+	/**
+	 * Justify axis values
+	 */
+	private function justify(array $vals, int $offset = 0)
+	{
+		$limit = $this->count_data * $this->bar_width + 4 + $offset;
+		$s = trim(implode(" ", $vals));
+		$l = strlen($s);
 
-        if($l >= $num_chars){
-            $s = explode("\n", wordwrap($s, $num_chars));
-            $s = $s[0];
-            $l = strlen($s);
-        }
+		if($l >= $limit){
+			$ret = wordwrap($s, $limit);
+		} else {
+			$c = count($vals) - 1;
+			$h = ceil(($limit - $l) / $c);
+			$ret = str_replace(' ', str_repeat(' ', $h), $s);
+		}
 
-        $c = substr_count($s, ' ');
-
-        if($c === 0) return str_pad($s, $num_chars, ' ', STR_PAD_BOTH);
-
-        $a = ($num_chars-$l+$c)/$c;
-        $h = floor($a);
-        $i = ($a-$h)*$c;
-        $w = explode(' ', $s, $i+1);
-        $w[$i] = str_replace(' ', str_repeat(' ', $h), $w[$i]);
-
-        return implode(str_repeat(' ', ceil($a)), $w);
-    }
+		return $ret;
+	}
 
 }// /cli_graph_ml
